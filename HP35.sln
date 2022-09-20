@@ -1,0 +1,16 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HP35", "HP35\HP35.csproj", "{D1437F4A-406E-4C59-9B2A-325CB298805E}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{D1437F4A-406E-4C59-9B2A-325CB298805E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D1437F4A-406E-4C59-9B2A-325CB298805E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D1437F4A-406E-4C59-9B2A-325CB298805E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D1437F4A-406E-4C59-9B2A-325CB298805E}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
