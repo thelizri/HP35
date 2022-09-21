@@ -14,6 +14,13 @@ public class DoublyLinkedList<T>
         {
             this.data = data;
         }
+
+        public Node(T data, Node<T> previous, Node<T> next)
+        {
+            this.data = data;
+            this.previous = previous;
+            this.next = next;
+        }
         
         public Node()
         {
@@ -38,8 +45,7 @@ public class DoublyLinkedList<T>
         }
         else
         {
-            Node<T> temp = new Node<T>(data);
-            temp.previous = node;
+            Node<T> temp = new Node<T>(data, node, null);
             node.next = temp;
             node = temp;
         }
@@ -55,7 +61,7 @@ public class DoublyLinkedList<T>
         {
             T result = node.data;
             node = node.previous;
-            node.next = null;
+            if(node!=null) node.next = null; //We can't access node.next if node is null
             return result;
         }
     }
@@ -67,8 +73,7 @@ public class DoublyLinkedList<T>
         {
             next = next.previous;
         }
-        next.previous = new Node<T>(item);
-        next.previous.next = next;
+        next.previous = new Node<T>(item, null, next);
     }
 
     public bool isEmpty()
