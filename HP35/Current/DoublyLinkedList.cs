@@ -32,6 +32,68 @@ public class DoublyLinkedList<T>
         return node.data;
     }
 
+    public void addData(T data, int index)
+    {
+        if(index==0) push(data);
+        
+        Node<T> next = node;
+        int position = 0;
+        while (next.previous != null)
+        {
+            next = next.previous;
+            position++;
+            if (position == index)
+            {
+                addData(data, next);
+                return;
+            }
+        }
+
+        next.previous = new Node<T>(data,null,next);
+    }
+
+    private void addData(T data, Node<T> node)
+    {
+        Node<T> newnode = new Node<T>(data, node, node.next);
+        node.next.previous = newnode;
+        node.next = newnode;
+    }
+
+    public T removeData(int index)
+    {
+        if(index==0) return pop();
+        
+        Node<T> next = node;
+        int position = 0;
+        while (next.previous != null)
+        {
+            next = next.previous;
+            position++;
+            if (position == index)
+            {
+                return remove(next);
+            }
+        }
+
+        return node.data;
+    }
+
+    private T remove(Node<T> node)
+    {
+        if (node.previous != null)
+        {
+            node.next.previous = node.previous;
+            node.previous.next = node.next;
+            return node.data;   
+        }
+        else
+        {
+            T result = node.data;
+            node.next.previous = null;
+            return result;
+        }
+    }
+
     public DoublyLinkedList()
     {
         node = null;
@@ -84,5 +146,33 @@ public class DoublyLinkedList<T>
         }
 
         return false;
+    }
+
+    public void print_backwards()
+    {
+        Node<T> next = node;
+        while (next.previous != null)
+        {
+            next = next.previous;
+        }
+
+        Console.Write("\n "+next.data);
+        while (next.next != null)
+        {
+            next = next.next;
+            Console.Write(" "+next.data);
+        }
+    }
+
+    public void print_forwards()
+    {
+        Node<T> next = node;
+        
+        Console.Write("\n "+next.data);
+        while (next.previous != null)
+        {
+            next = next.previous;
+            Console.Write(" "+next.data);
+        }
     }
 }

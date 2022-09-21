@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Diagnostics;
 
 namespace HP35
@@ -9,18 +10,21 @@ namespace HP35
         
         static void Main(string[] args)
         {
-            StackLinkedList<int> test = create_dynamic_linked_list(10);
-            for (int i = 0; i < 100; i++)
-            {
-                try
-                {
-                    Console.WriteLine(test.pop());
-                }
-                catch (Exception e)
-                {
-                    Console.WriteLine(e.Message);
-                }
-            }
+            DoublyLinkedList<int> test = create_doubly_linked_list(10);
+            test.print_forwards();
+            test.addData(11,10);
+            test.print_forwards();
+            test.print_backwards();
+            test.removeData(10);
+            test.print_forwards();
+            Console.WriteLine("\nStackRegular");
+
+            StackLinkedList<int> test2 = create_dynamic_linked_list(10);
+            test2.print_forwards();
+            test2.addData(11,4);
+            test2.print_forwards();
+            test2.removeData(4);
+            test2.print_forwards();
 
         }
 
@@ -99,7 +103,18 @@ namespace HP35
         private static StackLinkedList<int> create_dynamic_linked_list(int size)
         {
             StackLinkedList<int> result = new StackLinkedList<int>();
-            for (int i = 1; i <= size; i++)
+            for (int i = size-1; i >=0; i--)
+            {
+                result.push(i);
+            }
+
+            return result;
+        }
+        
+        private static DoublyLinkedList<int> create_doubly_linked_list(int size)
+        {
+            DoublyLinkedList<int> result = new DoublyLinkedList<int>();
+            for (int i = size-1; i >=0; i--)
             {
                 result.push(i);
             }

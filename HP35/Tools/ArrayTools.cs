@@ -17,7 +17,7 @@ public class ArrayTools
 
         return array;
     }
-    
+
     public int[] create_unsorted_array(int size)
     {
         Random random = new Random();

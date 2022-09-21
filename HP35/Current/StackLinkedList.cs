@@ -18,6 +18,55 @@ public class StackLinkedList<T>
         {
         }
     }
+    public void addData(T data, int index)
+    {
+        if(index==0) push(data);
+        
+        Node<T> next = top;
+        int position = 0;
+        while (next.link != null)
+        {
+            next = next.link;
+            position++;
+            if (position == index-1)
+            {
+                addData(data, next);
+                break;
+            }
+        }
+    }
+    private void addData(T data, Node<T> node)
+    {
+        Node<T> newnode = new Node<T>(data);
+        Node<T> temp = node.link;
+        node.link = newnode;
+        newnode.link = temp;
+    }
+    
+    public T removeData(int index)
+    {
+        if(index==0) return pop();
+        
+        Node<T> next = top;
+        int position = 0;
+        while (next.link != null)
+        {
+            next = next.link;
+            position++;
+            if (position == index-1)
+            {
+                return remove(next);
+            }
+        }
+
+        return top.data;
+    }
+
+    private T remove(Node<T> node)
+    {
+        node.link = node.link.link;
+        return node.link.data;
+    }
 
     public T getData()
     {
@@ -79,5 +128,17 @@ public class StackLinkedList<T>
         }
 
         return false;
+    }
+    
+    public void print_forwards()
+    {
+        Node<T> next = top;
+        
+        Console.Write("\n "+next.data);
+        while (next.link != null)
+        {
+            next = next.link;
+            Console.Write(" "+next.data);
+        }
     }
 }
