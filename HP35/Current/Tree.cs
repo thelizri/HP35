@@ -31,7 +31,7 @@ public class Tree<T>
         root = null;
     }
 
-    public T lookup(int key, T value)
+    public T lookup(int key)
     {
         if (root == null) throw new KeyNotFoundException("Tree is empty");
             
@@ -59,8 +59,7 @@ public class Tree<T>
     {
         if (root == null)
         {
-            root.data = value;
-            root.key = key;
+            root = new Node(key, value);
         }
         
         Node node = root;
