@@ -2,7 +2,7 @@
 
 namespace HP35;
 
-public class Tree
+public class Tree : IEnumerator
 {
     private Node root;
     private Node current_node;
@@ -94,5 +94,32 @@ public class Tree
                 return;
             }
         }
+    }
+
+    private void init_left_node()
+    {
+        if (root == null) return;
+        
+        Node node = root;
+        while (node.left != null)
+        {
+            node = node.left;
+        }
+        current_node = node;
+    }
+
+    public bool MoveNext()
+    {
+        throw new NotImplementedException();
+    }
+
+    public void Reset()
+    {
+        throw new NotImplementedException();
+    }
+
+    public object Current
+    {
+        get { return current_node.data; }
     }
 }
