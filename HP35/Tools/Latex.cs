@@ -9,6 +9,7 @@ public class Latex
     private string table_bottom;
 
     private List<string> info;
+    private List<string> just_numbers;
 
     public Latex()
     {
@@ -25,13 +26,20 @@ public class Latex
                        "\\label{tab:my-table}\n" +
                        "\\end{table}";
         info = new List<string>();
+        just_numbers = new List<string>();
     }
 
     public void addLine(int n, double mean, double min, double max)
     {
+        int tmean = return_two_sigfigs(mean);
+        int tmin = return_two_sigfigs(min);
+        int tmax = return_two_sigfigs(max);
         string data = String.Format("{0} & {1} & {2} & {3} \\\\ \\hline", n,
-            return_two_sigfigs(mean), return_two_sigfigs(min), return_two_sigfigs(max));
+            tmean, tmin, tmax);
         info.Add(data);
+        data = String.Format("{0} {1} {2} {3}", n,
+            tmean, tmin, tmax);
+        just_numbers.Add(data);
     }
 
     public void print()
@@ -43,8 +51,15 @@ public class Latex
             Console.WriteLine(x);
         }
         Console.WriteLine(table_bottom);
+        
+        Console.WriteLine("\n\n\nOnly numbers\n");
+        Console.WriteLine("n mean min max");
+        foreach (string x in just_numbers)
+        {
+            Console.WriteLine(x);
+        }
     }
-
+    
     private int return_two_sigfigs(double number)
     {
         int n = (int) Math.Round(number);

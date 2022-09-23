@@ -38,9 +38,8 @@ public class StackLinkedList<T>
     private void addData(T data, Node<T> node)
     {
         Node<T> newnode = new Node<T>(data);
-        Node<T> temp = node.link;
+        newnode.link = node.link;
         node.link = newnode;
-        newnode.link = temp;
     }
     
     public T removeData(int index)
