@@ -54,7 +54,9 @@ public class DoublyLinkedList<T>
 
     private void addData(T data, Node<T> node)
     {
-        Node<T> newnode = new Node<T>(data, node, node.next);
+        Node<T> newnode = new Node<T>(data);
+        newnode.previous = node;
+        newnode.next = node.next;
         node.next.previous = newnode;
         node.next = newnode;
     }
