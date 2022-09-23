@@ -1,18 +1,21 @@
-﻿namespace HP35;
+﻿using System.Collections;
 
-public class Tree<T>
+namespace HP35;
+
+public class Tree
 {
     private Node root;
+    private Node current_node;
 
     private class Node
     {
-        public T data;
+        public int data;
         public int key;
         public Node parent;
         public Node left;
         public Node right;
         
-        public Node(int key, T data)
+        public Node(int key, int data)
         {
             this.key = key;
             this.data = data;
@@ -31,7 +34,7 @@ public class Tree<T>
         root = null;
     }
 
-    public T lookup(int key)
+    public int lookup(int key)
     {
         if (root == null) throw new KeyNotFoundException("Tree is empty");
             
@@ -55,7 +58,7 @@ public class Tree<T>
         }
     }
 
-    public void add(int key, T value)
+    public void add(int key, int value)
     {
         if (root == null)
         {
@@ -92,5 +95,4 @@ public class Tree<T>
             }
         }
     }
-    
 }
