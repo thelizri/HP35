@@ -2,15 +2,17 @@
 
 namespace HP35;
 
-public class Tree : IEnumerator
+public class Tree : IEnumerable<int>, IEnumerator<int>
 {
     private Node root;
     private Node current_node;
+    private Stack<Node> stack;
 
     private class Node
     {
         public int data;
         public int key;
+        public bool accessed;
         public Node parent;
         public Node left;
         public Node right;
@@ -19,6 +21,7 @@ public class Tree : IEnumerator
         {
             this.key = key;
             this.data = data;
+            this.accessed = false;
         }
 
         public void set(Node parent, Node left, Node right)
@@ -32,6 +35,7 @@ public class Tree : IEnumerator
     public Tree()
     {
         root = null;
+        stack = new Stack<Node>();
     }
 
     public int lookup(int key)
@@ -56,6 +60,23 @@ public class Tree : IEnumerator
                 return node.data;
             }
         }
+    }
+
+    public void in_order_traversal()
+    {
+        if (root == null)
+            return;
+        in_order_traversal(root);
+    }
+
+    private void in_order_traversal(Node node)
+    {
+        if(node.left!=null)
+            in_order_traversal(node.left);
+        Console.Write($"{node.data} ");
+        stack.Push(node);
+        if(node.right!=null)
+            in_order_traversal(node.right);
     }
 
     public void add(int key, int value)
@@ -95,31 +116,45 @@ public class Tree : IEnumerator
             }
         }
     }
-
-    private void init_left_node()
+    
+    /// <summary>
+    /// ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    /// ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    /// </summary>
+    /// <returns></returns>
+    
+    public IEnumerator<int> GetEnumerator()
     {
-        if (root == null) return;
-        
-        Node node = root;
-        while (node.left != null)
-        {
-            node = node.left;
-        }
-        current_node = node;
+        return this;
+    }
+
+    IEnumerator IEnumerable.GetEnumerator()
+    {
+        return GetEnumerator();
     }
 
     public bool MoveNext()
     {
-        throw new NotImplementedException();
+        if (stack.TryPop(out current_node)) return true;
+
+        return false;
     }
 
     public void Reset()
     {
-        throw new NotImplementedException();
+        //Do nothing
     }
 
-    public object Current
+    public int Current
     {
         get { return current_node.data; }
     }
+
+    object IEnumerator.Current => Current;
+
+    public void Dispose()
+    {
+        //
+    }
+    
 }
