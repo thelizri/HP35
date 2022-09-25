@@ -2,7 +2,7 @@
 
 namespace HP35;
 
-public class Tree : IEnumerable<int>, IEnumerator<int>
+public partial class Tree
 {
     private Node root;
     private Node current_node;
@@ -61,22 +61,33 @@ public class Tree : IEnumerable<int>, IEnumerator<int>
             }
         }
     }
-
-    public void in_order_traversal()
+    
+    private IEnumerable<int> InOrderTraversal()
     {
         if (root == null)
-            return;
-        in_order_traversal(root);
+            throw new Exception("Tree is empty");
+        return InOrderTraversal(root);
     }
 
-    private void in_order_traversal(Node node)
+    private IEnumerable<int> InOrderTraversal(Node node)
     {
-        if(node.left!=null)
-            in_order_traversal(node.left);
-        Console.Write($"{node.data} ");
-        stack.Push(node);
-        if(node.right!=null)
-            in_order_traversal(node.right);
+        //if (node.left != null)
+        {
+            foreach (var x in InOrderTraversal(node.left))
+            {
+                yield return x;
+            }
+        }
+        
+        yield return node.data;
+
+        //if (node.right != null)
+        {
+            foreach (var x in InOrderTraversal(node.right))
+            {
+                yield return x;
+            }
+        }
     }
 
     public void add(int key, int value)
@@ -117,44 +128,17 @@ public class Tree : IEnumerable<int>, IEnumerator<int>
         }
     }
     
-    /// <summary>
-    /// ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    /// ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    /// </summary>
-    /// <returns></returns>
-    
+}
+
+public partial class Tree : IEnumerable<int>
+{
     public IEnumerator<int> GetEnumerator()
     {
-        return this;
+        return InOrderTraversal().GetEnumerator();
     }
 
     IEnumerator IEnumerable.GetEnumerator()
     {
         return GetEnumerator();
     }
-
-    public bool MoveNext()
-    {
-        if (stack.TryPop(out current_node)) return true;
-
-        return false;
-    }
-
-    public void Reset()
-    {
-        //Do nothing
-    }
-
-    public int Current
-    {
-        get { return current_node.data; }
-    }
-
-    object IEnumerator.Current => Current;
-
-    public void Dispose()
-    {
-        //
-    }
-    
 }
