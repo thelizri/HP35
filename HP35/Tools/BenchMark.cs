@@ -4,11 +4,8 @@ namespace HP35;
 
 public class BenchMark
 {
-    private Latex latex;
-
     public BenchMark()
     {
-        this.latex = new Latex();
     }
 
     public void measure_time()
@@ -19,7 +16,6 @@ public class BenchMark
             int innerLoop = 1;
 
             SortingTools sortingTools = new SortingTools();
-            ArrayTools arrayTools = new ArrayTools();
             Random random = new Random();
 
             for (int i = 0; i < numberOfTests; i++)
@@ -31,7 +27,7 @@ public class BenchMark
 
                 for (int j = 0; j < outerLoop; j++)
                 {
-                    int[] array = arrayTools.create_unsorted_array(n);
+                    int[] array = ArrayTools.create_unsorted_array(n);
                     
                     //Measure the time
                     long t0 = Stopwatch.GetTimestamp();
@@ -65,7 +61,7 @@ public class BenchMark
                 mean = sum / outerLoop;
                 Console.WriteLine("n={0}, mean={1:0.###}, min={2:0.###}, " +
                                   "max={3:0.###}",n,Math.Round(mean),Math.Round(min),Math.Round(max));
-                latex.addLine(n,mean,min, max);
+                Latex.addLine(n,mean,min, max);
 
                 n *= 2;
             }

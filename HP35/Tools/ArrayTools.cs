@@ -2,9 +2,9 @@
 
 namespace HP35;
 
-public class ArrayTools
+public static class ArrayTools
 {
-    public int[] create_sorted_array(int size)
+    public static int[] create_sorted_array(int size)
     {
         Random random = new Random();
         int[] array = new int[size];
@@ -18,7 +18,7 @@ public class ArrayTools
         return array;
     }
 
-    public int[] create_unsorted_array(int size)
+    public static int[] create_unsorted_array(int size)
     {
         Random random = new Random();
         int[] array = new int[size];
@@ -30,7 +30,7 @@ public class ArrayTools
         return array;
     }
 
-    public void print_array<T>(T[] array)
+    public static void print_array<T>(T[] array)
     {
         StringBuilder stringBuilder = new StringBuilder("["+array[0].ToString());
         
@@ -43,7 +43,7 @@ public class ArrayTools
         Console.WriteLine(stringBuilder.ToString());
     }
 
-    public int[] append_array(int[] a, int[] b)
+    public static int[] append_array(int[] a, int[] b)
     {
         int size = a.Length + b.Length;
         int[] result = new int[size];
@@ -60,5 +60,30 @@ public class ArrayTools
         }
 
         return result;
+    }
+    
+    public static Tree create_balanced_tree(int size, int[] array)
+    {
+        Tree result = new Tree();
+        merge_tree(0, size - 1, result, array);
+        return result;
+    }
+    public static Tree create_balanced_tree(int size)
+    {
+        int[] array = create_sorted_array(size);
+        Tree result = new Tree();
+        merge_tree(0, size - 1, result, array);
+        return result;
+    }
+
+    public static void merge_tree(int left, int right, Tree tree, int[] array)
+    {
+        if (left > right) return;
+        
+        int middle = (left + right) / 2;
+        int value = array[middle];
+        tree.add(value, value);
+        merge_tree(left, middle-1, tree, array);
+        merge_tree(middle+1, right, tree, array);
     }
 }

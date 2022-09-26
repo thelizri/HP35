@@ -2,34 +2,25 @@
 
 namespace HP35;
 
-public class Latex
+public static class Latex
 {
-    private string table_upper;
+    private static string table_upper= "\\begin{table}[h]\n" +
+                                       "\\centering\n" +
+                                       "\\begin{tabular}{|l|l|l|l|}\n" +
+                                       "\\hline\n" +
+                                       "\\textbf{n} & \\multicolumn{1}{c|}{\\textbf{Mean}} &\n" +
+                                       "\\multicolumn{1}{c|}{\\textbf{Min}} &\n" +
+                                       "\\multicolumn{1}{c|}{\\textbf{Max}} \\\\ \\hline";
 
-    private string table_bottom;
+    private static string table_bottom = "\\end{tabular}\n" +
+                                         "\\caption{}\n" +
+                                         "\\label{tab:my-table}\n" +
+                                         "\\end{table}";
 
-    private List<string> info;
-    private List<string> just_numbers;
+    private static List<string> info = new List<string>();
+    private static List<string> just_numbers = new List<string>();
 
-    public Latex()
-    {
-        table_upper = "\\begin{table}[h]\n" +
-                      "\\centering\n" +
-                      "\\begin{tabular}{|l|l|l|l|}\n" +
-                      "\\hline\n" +
-                      "\\textbf{n} & \\multicolumn{1}{c|}{\\textbf{Mean}} &\n" +
-                      "\\multicolumn{1}{c|}{\\textbf{Min}} &\n" +
-                      "\\multicolumn{1}{c|}{\\textbf{Max}} \\\\ \\hline";
-        
-        table_bottom = "\\end{tabular}\n" +
-                       "\\caption{}\n" +
-                       "\\label{tab:my-table}\n" +
-                       "\\end{table}";
-        info = new List<string>();
-        just_numbers = new List<string>();
-    }
-
-    public void addLine(int n, double mean, double min, double max)
+    public static void addLine(int n, double mean, double min, double max)
     {
         int tmean = return_two_sigfigs(mean);
         int tmin = return_two_sigfigs(min);
@@ -41,8 +32,18 @@ public class Latex
             tmean, tmin, tmax);
         just_numbers.Add(data);
     }
+    
+    public static void addLine(int n, double mean, double min, double max, double difference)
+    {
+        string data = String.Format("{0:0.##} & {1:0.##} & {2:0.##} & {3:0.##} & {4:0.##}\\\\ \\hline", n,
+            mean, difference, min, max);
+        info.Add(data);
+        data = String.Format("{0:0.##} {1:0.##} {2:0.##} {3:0.##} {4:0.##}", n,
+            mean, difference, min, max);
+        just_numbers.Add(data);
+    }
 
-    public void print()
+    public static void print()
     {
         Console.WriteLine("\nLatex table\n");
         Console.WriteLine(table_upper);
@@ -60,7 +61,7 @@ public class Latex
         }
     }
     
-    private int return_two_sigfigs(double number)
+    private static int return_two_sigfigs(double number)
     {
         int n = (int) Math.Round(number);
         StringBuilder numberString = new StringBuilder(n.ToString());

@@ -5,14 +5,11 @@ namespace HP35;
 public partial class Tree
 {
     private Node root;
-    private Node current_node;
-    private Stack<Node> stack;
 
     private class Node
     {
         public int data;
         public int key;
-        public bool accessed;
         public Node parent;
         public Node left;
         public Node right;
@@ -21,21 +18,18 @@ public partial class Tree
         {
             this.key = key;
             this.data = data;
-            this.accessed = false;
         }
-
-        public void set(Node parent, Node left, Node right)
+        public Node(int key, int data, Node parent)
         {
+            this.key = key;
+            this.data = data;
             this.parent = parent;
-            this.left = left;
-            this.right = right;
         }
     }
 
     public Tree()
     {
         root = null;
-        stack = new Stack<Node>();
     }
 
     public int lookup(int key)
@@ -61,6 +55,23 @@ public partial class Tree
             }
         }
     }
+
+    public bool print_tree_inorder()
+    {
+        if (root == null)
+            return false;
+        inorder_traversal(root);
+        return true;
+    }
+
+    private void inorder_traversal(Node node)
+    {
+        if(node.left!=null)
+            inorder_traversal(node.left);
+        Console.Write($"{node.data} ");
+        if(node.right!=null)
+            inorder_traversal(node.right);
+    }
     
     private IEnumerable<int> InOrderTraversal()
     {
@@ -71,7 +82,7 @@ public partial class Tree
 
     private IEnumerable<int> InOrderTraversal(Node node)
     {
-        //if (node.left != null)
+        if (node.left != null)
         {
             foreach (var x in InOrderTraversal(node.left))
             {
@@ -81,7 +92,7 @@ public partial class Tree
         
         yield return node.data;
 
-        //if (node.right != null)
+        if (node.right != null)
         {
             foreach (var x in InOrderTraversal(node.right))
             {
@@ -104,8 +115,7 @@ public partial class Tree
             {
                 if (node.left == null)
                 {
-                    node.left = new Node(key, value);
-                    node.left.parent = node;
+                    node.left = new Node(key, value, node);
                     return;
                 }
                 node = node.left;
@@ -114,8 +124,7 @@ public partial class Tree
             {
                 if (node.right == null)
                 {
-                    node.right = new Node(key, value);
-                    node.right.parent = node;
+                    node.right = new Node(key, value, node);
                     return;
                 }
                 node = node.right;
