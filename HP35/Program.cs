@@ -6,17 +6,16 @@ namespace HP35
 {
     class Program
     {
-
-        static void Main(string[] args)
+        //Binary search
+        //Delete operation
+        static void Main()
         {
             Tree tree = ArrayTools.create_balanced_tree(10);
-
             foreach (var x in tree)
             {
-                tree.add(19,19);
+                tree.add(199,199);
                 Console.Write($"{x} ");
             }
         }
-        
     }
 }

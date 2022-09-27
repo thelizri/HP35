@@ -2,24 +2,26 @@
 
 public class DoublyLinkedList<T>
 {
-    private Node<T> node;
+    private Node topNode;
+    private Node bottomNode;
+    private int length;
 
-    private class Node<T>
+    public class Node
     {
         public T data;
-        public Node<T> previous;
-        public Node<T> next;
+        public Node child;
+        public Node parent;
         
         public Node(T data)
         {
             this.data = data;
         }
 
-        public Node(T data, Node<T> previous, Node<T> next)
+        public Node(T data, Node child, Node parent)
         {
             this.data = data;
-            this.previous = previous;
-            this.next = next;
+            this.child = child;
+            this.parent = parent;
         }
         
         public Node()
@@ -29,18 +31,18 @@ public class DoublyLinkedList<T>
 
     public T getData()
     {
-        return node.data;
+        return topNode.data;
     }
 
     public void addData(T data, int index)
     {
         if(index==0) push(data);
         
-        Node<T> next = node;
+        Node next = topNode;
         int position = 0;
-        while (next.previous != null)
+        while (next.child != null)
         {
-            next = next.previous;
+            next = next.child;
             position++;
             if (position == index)
             {
@@ -49,27 +51,28 @@ public class DoublyLinkedList<T>
             }
         }
 
-        next.previous = new Node<T>(data,null,next);
+        next.child = new Node(data,null,next);
     }
 
-    private void addData(T data, Node<T> node)
+    private void addData(T data, Node node)
     {
-        Node<T> newnode = new Node<T>(data);
-        newnode.previous = node;
-        newnode.next = node.next;
-        node.next.previous = newnode;
-        node.next = newnode;
+        Node newnode = new Node(data);
+        newnode.child = node;
+        newnode.parent = node.parent;
+        node.parent.child = newnode;
+        node.parent = newnode;
     }
 
     public T removeData(int index)
     {
         if(index==0) return pop();
-        
-        Node<T> next = node;
+
+        length--;
+        Node next = topNode;
         int position = 0;
-        while (next.previous != null)
+        while (next.child != null)
         {
-            next = next.previous;
+            next = next.child;
             position++;
             if (position == index)
             {
@@ -77,72 +80,82 @@ public class DoublyLinkedList<T>
             }
         }
 
-        return node.data;
+        return topNode.data;
     }
 
-    private T remove(Node<T> node)
+    public void removeNode(Node node)
     {
-        if (node.previous != null)
+        length--;
+        Node child = node.child;
+        Node parent = node.parent;
+        parent.child = child;
+        child.parent = parent;
+    }
+
+    private T remove(Node node)
+    {
+        length--;
+        if (node.child != null)
         {
-            node.next.previous = node.previous;
-            node.previous.next = node.next;
+            node.parent.child = node.child;
+            node.child.parent = node.parent;
             return node.data;   
         }
         else
         {
             T result = node.data;
-            node.next.previous = null;
+            node.parent.child = null;
             return result;
         }
     }
 
     public DoublyLinkedList()
     {
-        node = null;
+        topNode = null;
+        length = 0;
     }
 
     public void push(T data)
     {
-        if (node == null)
+        length++;
+        if (topNode == null)
         {
-            node = new Node<T>(data);
+            topNode = new Node(data);
         }
         else
         {
-            Node<T> temp = new Node<T>(data, node, null);
-            node.next = temp;
-            node = temp;
+            Node temp = new Node(data, topNode, null);
+            topNode.parent = temp;
+            topNode = temp;
         }
     }
 
     public T pop()
     {
-        if (node == null)
+        if (topNode == null)
         {
             throw new StackOverflowException("Stack is empty");
         }
         else
         {
-            T result = node.data;
-            node = node.previous;
-            if(node!=null) node.next = null; //We can't access node.next if node is null
+            length--;
+            T result = topNode.data;
+            topNode = topNode.child;
+            if(topNode!=null) topNode.parent = null; //We can't access node.next if node is null
             return result;
         }
     }
     
     public void append(T item)
     {
-        Node<T> next = node;
-        while (next.previous != null)
-        {
-            next = next.previous;
-        }
-        next.previous = new Node<T>(item, null, next);
+        length++;
+        bottomNode.child = new Node(item, null, bottomNode);
+        bottomNode = bottomNode.child;
     }
 
     public bool isEmpty()
     {
-        if (node == null)
+        if (topNode == null)
         {
             return true;
         }
@@ -152,29 +165,44 @@ public class DoublyLinkedList<T>
 
     public void print_backwards()
     {
-        Node<T> next = node;
-        while (next.previous != null)
+        Node next = topNode;
+        while (next.child != null)
         {
-            next = next.previous;
+            next = next.child;
         }
 
         Console.Write("\n "+next.data);
-        while (next.next != null)
+        while (next.parent != null)
         {
-            next = next.next;
+            next = next.parent;
             Console.Write(" "+next.data);
         }
     }
 
     public void print_forwards()
     {
-        Node<T> next = node;
+        Node next = topNode;
         
         Console.Write("\n "+next.data);
-        while (next.previous != null)
+        while (next.child != null)
         {
-            next = next.previous;
+            next = next.child;
             Console.Write(" "+next.data);
         }
+    }
+
+    public Node[] getNodeArray()
+    {
+        Node[] result = new Node[length];
+        int index = 1;
+        result[0] = topNode;
+        while (topNode.child != null)
+        {
+            topNode = topNode.child;
+            result[index] = topNode;
+            index++;
+        }
+
+        return result;
     }
 }
