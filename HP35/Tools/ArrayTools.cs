@@ -30,6 +30,39 @@ public static class ArrayTools
         return array;
     }
 
+    public static int[] random_sequence(int size, int max)
+    {
+        Random random = new Random();
+        int[] array = new int[size];
+        for (int i = 0; i < array.Length; i++)
+        {
+            array[i] = random.Next(max);
+        }
+
+        return array;
+    }
+
+    public static DoublyLinkedList list(int size)
+    {
+        DoublyLinkedList list = new DoublyLinkedList();
+        for (int i = 0; i < size; i++)
+        {
+            list.push(i);
+        }
+
+        return list;
+    }
+    
+    public static StackLinkedList slist(int size)
+    {
+        StackLinkedList list = new StackLinkedList();
+        for (int i = 0; i < size; i++)
+        {
+            list.push(i);
+        }
+        return list;
+    }
+
     public static void print_array<T>(T[] array)
     {
         StringBuilder stringBuilder = new StringBuilder("["+array[0].ToString());

@@ -20,17 +20,29 @@ public static class Latex
     private static List<string> info = new List<string>();
     private static List<string> just_numbers = new List<string>();
 
-    public static void addLine(int n, double mean, double min, double max)
+    public static void addLine(int n, double mean, double min, double max, bool sigfigs)
     {
-        int tmean = return_two_sigfigs(mean);
-        int tmin = return_two_sigfigs(min);
-        int tmax = return_two_sigfigs(max);
-        string data = String.Format("{0} & {1} & {2} & {3} \\\\ \\hline", n,
-            tmean, tmin, tmax);
-        info.Add(data);
-        data = String.Format("{0} {1} {2} {3}", n,
-            tmean, tmin, tmax);
-        just_numbers.Add(data);
+        if (sigfigs)
+        {
+            int tmean = return_two_sigfigs(mean);
+            int tmin = return_two_sigfigs(min);
+            int tmax = return_two_sigfigs(max);
+            string data = String.Format("{0} & {1} & {2} & {3} \\\\ \\hline", n,
+                tmean, tmin, tmax);
+            info.Add(data);
+            data = String.Format("{0} {1} {2} {3}", n,
+                tmean, tmin, tmax);
+            just_numbers.Add(data);
+        }
+        else
+        {
+            string data = String.Format("{0:0.##} & {1:0.##} & {2:0.##} & {3:0.##}\\\\ \\hline", n,
+                mean,  min, max);
+            info.Add(data);
+            data = String.Format("{0:0.##} {1:0.##} {2:0.##} {3:0.##}", n,
+                mean,  min, max);
+            just_numbers.Add(data);
+        }
     }
     
     public static void addLine(int n, double mean, double min, double max, double difference)

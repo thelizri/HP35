@@ -1,32 +1,21 @@
 ﻿namespace HP35;
 
-public class StackLinkedList<T>
+public class StackLinkedList
 {
-    private Node<T> top;
-
-    private class Node<T>
+    private Node top;
+    public StackLinkedList()
     {
-        public T data;
-        public Node<T> link;
-        public Node(T data)
-        {
-            this.data = data;
-            this.link = null;
-        }
-        
-        public Node()
-        {
-        }
+        top = null;
     }
-    public void addData(T data, int index)
+    public void addData(int data, int index)
     {
         if(index==0) push(data);
         
-        Node<T> next = top;
+        Node next = top;
         int position = 0;
-        while (next.link != null)
+        while (next.child != null)
         {
-            next = next.link;
+            next = next.child;
             position++;
             if (position == index-1)
             {
@@ -35,66 +24,59 @@ public class StackLinkedList<T>
             }
         }
     }
-    private void addData(T data, Node<T> node)
+    private void addData(int data, Node node)
     {
-        Node<T> newnode = new Node<T>(data);
-        newnode.link = node.link;
-        node.link = newnode;
+        Node newnode = new Node(data);
+        newnode.child = node.child;
+        node.child = newnode;
     }
-    
-    public T removeData(int index)
+
+    public void removeNode(Node node)
     {
-        if(index==0) return pop();
-        
-        Node<T> next = top;
-        int position = 0;
-        while (next.link != null)
+        if (node == top)
         {
-            next = next.link;
-            position++;
-            if (position == index-1)
-            {
-                return remove(next);
-            }
+            pop();
+            return;
         }
 
-        return top.data;
+        Node next = top;
+        while (next.child != node)
+        {
+            next = next.child;
+        }
+        
+        next.child = node.child;
     }
 
-    private T remove(Node<T> node)
+
+    public void push(Node node)
     {
-        node.link = node.link.link;
-        return node.link.data;
+        if (top == null)
+            top = node;
+        else
+        {
+            node.child = top;
+            top = node;
+        }
     }
-
-    public T getData()
-    {
-        return top.data;
-    }
-
-    public StackLinkedList()
-    {
-        top = null;
-    }
-
-    public void push(T data)
+    public void push(int data)
     {
         if (top == null)
         {
-            top = new Node<T>();
+            top = new Node();
             top.data = data;
-            top.link = null;
+            top.child = null;
         }
         else
         {
-            Node<T> temp = new Node<T>();
+            Node temp = new Node();
             temp.data = data;
-            temp.link = top;
+            temp.child = top;
             top = temp;
         }
     }
 
-    public T pop()
+    public int pop()
     {
         if (top == null)
         {
@@ -102,42 +84,46 @@ public class StackLinkedList<T>
         }
         else
         {
-            T result = top.data;
-            top = top.link;
+            int result = top.data;
+            top = top.child;
             return result;
         }
     }
-    
-    public void append(T item)
-    {
-        Node<T> next = top;
-        while (next.link != null)
-        {
-            next = next.link;
-        }
 
-        next.link = new Node<T>(item);
-    }
-
-    public bool isEmpty()
-    {
-        if (top == null)
-        {
-            return true;
-        }
-
-        return false;
-    }
-    
     public void print_forwards()
     {
-        Node<T> next = top;
+        Node next = top;
         
         Console.Write("\n "+next.data);
-        while (next.link != null)
+        while (next.child != null)
         {
-            next = next.link;
+            next = next.child;
             Console.Write(" "+next.data);
         }
     }
+    
+    public Node[] getNodeArray()
+    {
+        int length = 1;
+        Node next = top;
+        while (next.child != null)
+        {
+            next = next.child;
+            length++;
+        }
+
+        Node[] result = new Node[length];
+        next = top;
+        int index = 1;
+        result[0] = top;
+        while (next.child != null)
+        {
+            next = next.child;
+            result[index] = next;
+            index++;
+        }
+        
+        return result;
+    }
+    
 }

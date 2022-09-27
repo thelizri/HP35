@@ -1,111 +1,35 @@
 ﻿namespace HP35;
 
-public class DoublyLinkedList<T>
+public class DoublyLinkedList
 {
     private Node topNode;
     private Node bottomNode;
     private int length;
-
-    public class Node
-    {
-        public T data;
-        public Node child;
-        public Node parent;
-        
-        public Node(T data)
-        {
-            this.data = data;
-        }
-
-        public Node(T data, Node child, Node parent)
-        {
-            this.data = data;
-            this.child = child;
-            this.parent = parent;
-        }
-        
-        public Node()
-        {
-        }
-    }
-
-    public T getData()
-    {
-        return topNode.data;
-    }
-
-    public void addData(T data, int index)
-    {
-        if(index==0) push(data);
-        
-        Node next = topNode;
-        int position = 0;
-        while (next.child != null)
-        {
-            next = next.child;
-            position++;
-            if (position == index)
-            {
-                addData(data, next);
-                return;
-            }
-        }
-
-        next.child = new Node(data,null,next);
-    }
-
-    private void addData(T data, Node node)
-    {
-        Node newnode = new Node(data);
-        newnode.child = node;
-        newnode.parent = node.parent;
-        node.parent.child = newnode;
-        node.parent = newnode;
-    }
-
-    public T removeData(int index)
-    {
-        if(index==0) return pop();
-
-        length--;
-        Node next = topNode;
-        int position = 0;
-        while (next.child != null)
-        {
-            next = next.child;
-            position++;
-            if (position == index)
-            {
-                return remove(next);
-            }
-        }
-
-        return topNode.data;
-    }
-
+    
     public void removeNode(Node node)
     {
-        length--;
-        Node child = node.child;
-        Node parent = node.parent;
-        parent.child = child;
-        child.parent = parent;
-    }
-
-    private T remove(Node node)
-    {
-        length--;
-        if (node.child != null)
+        if (topNode==bottomNode)
         {
-            node.parent.child = node.child;
-            node.child.parent = node.parent;
-            return node.data;   
+            topNode = bottomNode = null;
+            length = 0;
+        }
+        else if (node == topNode)
+        {
+            topNode = topNode.child;
+            topNode.parent = null;
+        }
+        else if (node == bottomNode)
+        {
+            bottomNode = bottomNode.parent;
+            bottomNode.child = null;
         }
         else
         {
-            T result = node.data;
-            node.parent.child = null;
-            return result;
+            
+            Node child = node.child;
+            Node parent = node.parent;
+            parent.child = child;
+            child.parent = parent;
         }
     }
 
@@ -115,22 +39,38 @@ public class DoublyLinkedList<T>
         length = 0;
     }
 
-    public void push(T data)
+    public void push(int data)
     {
         length++;
         if (topNode == null)
         {
             topNode = new Node(data);
+            bottomNode = topNode;
         }
         else
         {
-            Node temp = new Node(data, topNode, null);
-            topNode.parent = temp;
-            topNode = temp;
+            topNode.parent = new Node(data, topNode, null);
+            topNode = topNode.parent;
+        }
+    }
+    
+    public void push(Node node)
+    {
+        length++;
+        if (topNode == null)
+        {
+            topNode = node;
+            bottomNode = topNode;
+        }
+        else
+        {
+            topNode.parent = node;
+            node.child = topNode;
+            topNode = topNode.parent;
         }
     }
 
-    public T pop()
+    public int pop()
     {
         if (topNode == null)
         {
@@ -139,14 +79,14 @@ public class DoublyLinkedList<T>
         else
         {
             length--;
-            T result = topNode.data;
+            int result = topNode.data;
             topNode = topNode.child;
             if(topNode!=null) topNode.parent = null; //We can't access node.next if node is null
             return result;
         }
     }
     
-    public void append(T item)
+    public void append(int item)
     {
         length++;
         bottomNode.child = new Node(item, null, bottomNode);
@@ -165,12 +105,12 @@ public class DoublyLinkedList<T>
 
     public void print_backwards()
     {
-        Node next = topNode;
-        while (next.child != null)
+        if (length == 0)
         {
-            next = next.child;
+            Console.WriteLine("\nIs empty");
+            return;
         }
-
+        Node next = bottomNode;
         Console.Write("\n "+next.data);
         while (next.parent != null)
         {
@@ -181,8 +121,12 @@ public class DoublyLinkedList<T>
 
     public void print_forwards()
     {
+        if (length == 0)
+        {
+            Console.WriteLine("\nIs empty");
+            return;
+        }
         Node next = topNode;
-        
         Console.Write("\n "+next.data);
         while (next.child != null)
         {
@@ -196,13 +140,13 @@ public class DoublyLinkedList<T>
         Node[] result = new Node[length];
         int index = 1;
         result[0] = topNode;
-        while (topNode.child != null)
+        Node next = topNode;
+        while (next.child != null)
         {
-            topNode = topNode.child;
-            result[index] = topNode;
+            next = next.child;
+            result[index] = next;
             index++;
         }
-
         return result;
     }
 }
