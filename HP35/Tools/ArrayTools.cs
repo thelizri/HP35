@@ -101,9 +101,10 @@ public static class ArrayTools
         merge_tree(0, size - 1, result, array);
         return result;
     }
-    public static Tree create_balanced_tree(int size)
+    
+    public static Tree create_balanced_tree(int size, out int[] array)
     {
-        int[] array = create_sorted_array(size);
+        array = create_sorted_array(size);
         Tree result = new Tree();
         merge_tree(0, size - 1, result, array);
         return result;
@@ -118,5 +119,20 @@ public static class ArrayTools
         tree.add(value, value);
         merge_tree(left, middle-1, tree, array);
         merge_tree(middle+1, right, tree, array);
+    }
+
+    public static Tree create_random_tree(int size, out int[] array)
+    {
+        Random rand = new Random();
+        Tree result = new Tree();
+        array = new int[size];
+        for (int i = 0; i < size; i++)
+        {
+            int x = rand.Next();
+            result.add(x, x);
+            array[i] = x;
+        }
+
+        return result;
     }
 }

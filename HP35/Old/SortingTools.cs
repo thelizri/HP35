@@ -1,8 +1,10 @@
-﻿namespace HP35;
+﻿using System.Security.AccessControl;
 
-public class SortingTools
+namespace HP35;
+
+public static class SortingTools
 {
-    public void section_sort(int[] array)
+    public static void selection_sort(int[] array)
     {
         for (int i = 0; i < array.Length - 1; i++)
         {
@@ -19,7 +21,7 @@ public class SortingTools
         }
     }
 
-    public void insertion_sort(int[] array)
+    public static void insertion_sort(int[] array)
     {
         for (int i = 1; i < array.Length; i++)
         {
@@ -40,7 +42,7 @@ public class SortingTools
         }
     }
 
-    public void merge_sort(int[] array)
+    public static void merge_sort(int[] array)
     {
         if (array.Length < 2)
         {
@@ -50,7 +52,7 @@ public class SortingTools
         merge_sort(array, temp, 0,array.Length-1);
     }
 
-    private void merge_sort(int[] array, int[] temp, int left, int right)
+    private static void merge_sort(int[] array, int[] temp, int left, int right)
     {
         if (left >= right)
         {
@@ -63,7 +65,7 @@ public class SortingTools
         merge(array, temp, left, right);
     }
 
-    private void merge(int[] array, int[] temp, int left, int right)
+    private static void merge(int[] array, int[] temp, int left, int right)
     {
         int length = right - left + 1;
         int leftIndex = left;
@@ -111,5 +113,45 @@ public class SortingTools
         
         Array.Copy(temp, left, array, left, length);
     }
-   
+
+    public static void quicksort(int[] array)
+    {
+        quicksort(array, 0, array.Length-1);
+    }
+
+    private static void quicksort(int[] array, int left, int right)
+    {
+        if (left >= right)
+            return;
+        int pivot = left + (right - left) / 2;
+        partition(array, pivot, left, right);
+        ArrayTools.print_array(array);
+        quicksort(array, pivot, right);
+        quicksort(array, left, pivot-1);
+    }
+
+    private static void partition(int[] array, int pivot, int left, int right)
+    {
+        int pivot_value = array[pivot];
+        while (left < right)
+        {
+            while (array[left] < pivot_value)
+            {
+                left++;
+            }
+
+            while (array[right] > pivot_value)
+            {
+                right--;
+            }
+
+            if (left < right)
+            {
+                //Swap elements
+                (array[left], array[right]) = (array[right], array[left]);
+                left++;
+                right--;
+            }
+        }
+    }
 }
