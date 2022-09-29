@@ -123,35 +123,30 @@ public static class SortingTools
     {
         if (left >= right)
             return;
-        int pivot = left + (right - left) / 2;
-        partition(array, pivot, left, right);
-        ArrayTools.print_array(array);
-        quicksort(array, pivot, right);
+        int pivot = partition(array,  left, right);
+        quicksort(array, pivot+1, right);
         quicksort(array, left, pivot-1);
     }
 
-    private static void partition(int[] array, int pivot, int left, int right)
+    private static int partition(int[] array, int left, int right)
     {
-        int pivot_value = array[pivot];
+        /*We move all the smaller elements to the left. The elements that are bigger than
+         the pivot value stay where they are. i keeps track of where we should swap the elements. 
+         Finally we swap the pivot value so that it is between the smaller values and bigger values.
+         */
+        int pivot_value = array[right];
+        int i = left;
         while (left < right)
         {
-            while (array[left] < pivot_value)
+            if (array[left] < pivot_value)
             {
-                left++;
+                //Swap
+                (array[left], array[i]) = (array[i], array[left]);
+                i++;
             }
-
-            while (array[right] > pivot_value)
-            {
-                right--;
-            }
-
-            if (left < right)
-            {
-                //Swap elements
-                (array[left], array[right]) = (array[right], array[left]);
-                left++;
-                right--;
-            }
+            left++;
         }
+        (array[right], array[i]) = (array[i], array[right]);
+        return i;
     }
 }
