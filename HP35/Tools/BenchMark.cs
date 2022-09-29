@@ -24,18 +24,13 @@ public static class BenchMark
                     for (int j = 0; j < outerLoop; j++)
                     {
                         //Prep work
-                        int[] array = ArrayTools.random_sequence(innerLoop, n);
-                        var list = ArrayTools.slist(n);
-                        var nodes = list.getNodeArray();
+                        
     
                         //Measure the time
                         long t0 = Stopwatch.GetTimestamp();
                         for (int ii = 0; ii < innerLoop; ii++)
                         {
-                            int index = array[ii];
-                            Node node = nodes[index];
-                            list.removeNode(node);
-                            list.push(node);
+                            
                         }
                         long t1 = Stopwatch.GetTimestamp();
                         double time = (t1 - t0);
