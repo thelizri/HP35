@@ -5,22 +5,26 @@ public class DoublyLinkedList
     private Node topNode;
     private Node bottomNode;
 
+    public Node TopNode => topNode;
+
+    public Node BottomNode => bottomNode;
+
     public class Node
     {
         public int data;
-        public Node child;
-        public Node parent;
+        public Node right;
+        public Node left;
 
         public Node(int data)
         {
             this.data = data;
         }
 
-        public Node(int data, Node child, Node parent)
+        public Node(int data, Node right, Node left)
         {
             this.data = data;
-            this.child = child;
-            this.parent = parent;
+            this.right = right;
+            this.left = left;
         }
 
         public Node()
@@ -33,6 +37,18 @@ public class DoublyLinkedList
         topNode = null;
     }
 
+    public Node find_bottom_Node()
+    {
+        Node next = topNode;
+        while (next.right != null)
+        {
+            next = next.right;
+        }
+
+        bottomNode = next;
+        return next;
+    }
+
     public void push(int data)
     {
         if (topNode == null)
@@ -42,8 +58,8 @@ public class DoublyLinkedList
         }
         else
         {
-            topNode.parent = new Node(data, topNode, null);
-            topNode = topNode.parent;
+            topNode.left = new Node(data, topNode, null);
+            topNode = topNode.left;
         }
     }
 
@@ -51,15 +67,15 @@ public class DoublyLinkedList
     {
         if (topNode == null) throw new StackOverflowException("Stack is empty");
         var result = topNode.data;
-        topNode = topNode.child;
-        if (topNode != null) topNode.parent = null; //We can't access node.next if node is null
+        topNode = topNode.right;
+        if (topNode != null) topNode.left = null; //We can't access node.next if node is null
         return result;
     }
 
     public void append(int item)
     {
-        bottomNode.child = new Node(item, null, bottomNode);
-        bottomNode = bottomNode.child;
+        bottomNode.right = new Node(item, null, bottomNode);
+        bottomNode = bottomNode.right;
     }
 
     public bool isEmpty()
@@ -83,9 +99,9 @@ public class DoublyLinkedList
 
         var next = bottomNode;
         Console.Write("\n " + next.data);
-        while (next.parent != null)
+        while (next.left != null)
         {
-            next = next.parent;
+            next = next.left;
             Console.Write(" " + next.data);
         }
     }
@@ -100,10 +116,41 @@ public class DoublyLinkedList
 
         Node next = topNode;
         Console.Write("\n " + next.data);
-        while (next.child != null)
+        while (next.right != null)
         {
-            next = next.child;
+            next = next.right;
             Console.Write(" " + next.data);
         }
+    }
+
+    public void sort()
+    {
+        quicksort(topNode, bottomNode);
+    }
+
+    private void quicksort(Node left, Node right)
+    {
+        if (right != null && left != right && left != right.right)
+        {
+            Node pivot = partition(left, right);
+            quicksort(left, pivot.left);
+            quicksort(pivot.right, right);
+        }
+    }
+
+    private Node partition(Node left, Node right)
+    {
+        int pivot = right.data;
+        Node i = left;
+        for (Node j = left; j != right; j = j.right)
+        {
+            if (j.data < pivot)
+            {
+                swap(i, j);
+                i = i.right;
+            }
+        }
+        swap(i, right);
+        return i;
     }
 }
