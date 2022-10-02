@@ -8,16 +8,19 @@ namespace HP35
     {
         static void Main()
         {
-            Random random = new Random();
-            var list = new DoublyLinkedList();
-            for (int i = 0; i < 20; i++)
+            Queue<int> test = new Queue<int>();
+            Console.WriteLine(test.isEmpty());
+            for (int i = 0; i < 10; i++)
             {
-                list.push(random.Next(300));
+                test.add(i);
             }
-            list.print_forwards();
-            list.sort();
-            list.print_forwards();
+
+            while (!test.isEmpty())
+            {
+                Console.WriteLine(test.remove());
+            }
         }
+
         
     }
 }
