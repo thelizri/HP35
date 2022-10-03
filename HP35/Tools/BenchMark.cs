@@ -4,12 +4,12 @@ namespace HP35;
 
 public static class BenchMark
 {
-    static void measure_time()
+    static void measure_time(bool sigfigs)
             {
                 int n = 10;
                 int numberOfTests = 12; //n doubles every test
                 int outerLoop = 1000;
-                int innerLoop = 1000;
+                int innerLoop = 1;
     
                 
                 Random random = new Random();
@@ -20,7 +20,11 @@ public static class BenchMark
                     double min = Double.PositiveInfinity;
                     double max = 0;
                     double mean = 0;
-    
+
+                    //Improve performance for large numbers
+                    if (n >= 30000) outerLoop = 100;
+                    if (n >= 1000000) outerLoop = 25;
+                    
                     for (int j = 0; j < outerLoop; j++)
                     {
                         //Prep work
@@ -45,7 +49,7 @@ public static class BenchMark
                     mean = sum / outerLoop;
                     Console.WriteLine("n={0}, mean={1:0.##}, min={2:0.##}, " +
                                       "max={3:0.##}",n,mean,min,max);
-                    Latex.addLine(n,mean,min, max, false);
+                    Latex.addLine(n,mean,min, max, sigfigs);
     
                     n *= 2;
                 }

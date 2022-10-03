@@ -7,7 +7,6 @@ public class Queue<T>
     public class Node
     {
         public Node back;
-        public Node forward;
         public T data;
 
         public Node(T data)
@@ -18,13 +17,12 @@ public class Queue<T>
         public Node(T data, Node forward)
         {
             this.data = data;
-            this.forward = forward;
         }
     }
 
     public void add(T data)
     {
-        if (frontOfQueue is null)
+        if (isEmpty())
         {
             frontOfQueue = backOfQueue = new Node(data);
         }
@@ -37,16 +35,15 @@ public class Queue<T>
 
     public T remove()
     {
-        if (frontOfQueue is null)
+        if (isEmpty())
         {
-            return default(T);
+            throw new Exception("Queue is empty");
         }
         else
         {
             T result = frontOfQueue.data;
             frontOfQueue = frontOfQueue.back;
-            if(frontOfQueue is not null) frontOfQueue.forward = null;
-                return result;
+            return result;
         }
     }
 

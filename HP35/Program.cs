@@ -9,31 +9,18 @@ namespace HP35
     {
         static void Main()
         {
-            QueueArray<int> test = new QueueArray<int>();
-            Console.WriteLine(test.isEmpty());
-            for (int i = 0; i < 100; i++)
+            var queue = new DynamicQueue<int>();
+            for (int i = 0; i < 20; i++)
             {
-                test.add(i);
+                queue.add(i);
             }
-
-            for (int i = 0; i < 30; i++)
+            queue.print();
+            for (int i = 0; i < 19; i++)
             {
-                Console.WriteLine(test.remove());
+                queue.remove();
             }
-            
-            for (int i = 100; i < 130; i++)
-            {
-                test.add(i);
-            }
-
-            while (!test.isEmpty())
-            {
-                Console.WriteLine(test.remove());
-            }
-            Console.WriteLine(test.isEmpty());
-            
+            queue.print();
         }
-
         
     }
 }

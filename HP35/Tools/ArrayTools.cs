@@ -53,9 +53,9 @@ public static class ArrayTools
         return list;
     }
     
-    public static StackLinkedList slist(int size)
+    public static SinglyLinkedList slist(int size)
     {
-        StackLinkedList list = new StackLinkedList();
+        SinglyLinkedList list = new SinglyLinkedList();
         for (int i = 0; i < size; i++)
         {
             list.push(i);
