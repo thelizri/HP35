@@ -39,7 +39,6 @@ public class Queue<T>
     {
         if (frontOfQueue is null)
         {
-            Console.WriteLine("Hello");
             return default(T);
         }
         else
@@ -55,4 +54,6 @@ public class Queue<T>
     {
         return (frontOfQueue is null);
     }
+    
+    
 }

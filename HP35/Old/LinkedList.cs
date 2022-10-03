@@ -2,151 +2,67 @@
 
 public class StackLinkedList
 {
-    private Node top;
+    private Node topNode;
+    private Node bottomNode;
     
     public class Node
     {
         public int data;
-        public Node child;
-        public Node parent;
-        
+        public Node next;
+
         public Node(int data)
         {
             this.data = data;
         }
 
-        public Node(int data, Node child, Node parent)
-        {
-            this.data = data;
-            this.child = child;
-            this.parent = parent;
-        }
-        
         public Node()
         {
         }
     }
     public StackLinkedList()
     {
-        top = null;
-    }
-    public void addData(int data, int index)
-    {
-        if(index==0) push(data);
-        
-        Node next = top;
-        int position = 0;
-        while (next.child != null)
-        {
-            next = next.child;
-            position++;
-            if (position == index-1)
-            {
-                addData(data, next);
-                break;
-            }
-        }
-    }
-    private void addData(int data, Node node)
-    {
-        Node newnode = new Node(data);
-        newnode.child = node.child;
-        node.child = newnode;
+        topNode = null;
+        bottomNode = null;
     }
 
-    public void removeNode(Node node)
-    {
-        if (node == top)
-        {
-            pop();
-            return;
-        }
-
-        Node next = top;
-        while (next.child != node)
-        {
-            next = next.child;
-        }
-        
-        next.child = node.child;
-    }
-
-
-    public void push(Node node)
-    {
-        if (top == null)
-            top = node;
-        else
-        {
-            node.child = top;
-            top = node;
-        }
-    }
     public void push(int data)
     {
-        if (top == null)
+        if (topNode == null)
         {
-            top = new Node();
-            top.data = data;
-            top.child = null;
+            topNode = bottomNode = new Node(data);
         }
         else
         {
-            Node temp = new Node();
-            temp.data = data;
-            temp.child = top;
-            top = temp;
+            bottomNode.next = new Node(data);
+            bottomNode = bottomNode.next;
         }
     }
 
     public int pop()
     {
-        if (top == null)
+        if (topNode == null)
         {
             throw new StackOverflowException("Stack is empty");
         }
         else
         {
-            int result = top.data;
-            top = top.child;
+            int result = topNode.data;
+            topNode = topNode.next;
             return result;
         }
     }
 
     public void print_forwards()
     {
-        Node next = top;
+        Node next = topNode;
         
         Console.Write("\n "+next.data);
-        while (next.child != null)
+        while (next.next != null)
         {
-            next = next.child;
+            next = next.next;
             Console.Write(" "+next.data);
         }
     }
     
-    public Node[] getNodeArray()
-    {
-        int length = 1;
-        Node next = top;
-        while (next.child != null)
-        {
-            next = next.child;
-            length++;
-        }
-
-        Node[] result = new Node[length];
-        next = top;
-        int index = 1;
-        result[0] = top;
-        while (next.child != null)
-        {
-            next = next.child;
-            result[index] = next;
-            index++;
-        }
-        
-        return result;
-    }
     
 }

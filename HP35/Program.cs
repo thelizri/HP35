@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Diagnostics;
+using Microsoft.VisualBasic.CompilerServices;
 
 namespace HP35
 {
@@ -8,9 +9,19 @@ namespace HP35
     {
         static void Main()
         {
-            Queue<int> test = new Queue<int>();
+            QueueArray<int> test = new QueueArray<int>();
             Console.WriteLine(test.isEmpty());
-            for (int i = 0; i < 10; i++)
+            for (int i = 0; i < 100; i++)
+            {
+                test.add(i);
+            }
+
+            for (int i = 0; i < 30; i++)
+            {
+                Console.WriteLine(test.remove());
+            }
+            
+            for (int i = 100; i < 130; i++)
             {
                 test.add(i);
             }
@@ -19,6 +30,8 @@ namespace HP35
             {
                 Console.WriteLine(test.remove());
             }
+            Console.WriteLine(test.isEmpty());
+            
         }
 
         
