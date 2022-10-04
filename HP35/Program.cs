@@ -20,6 +20,9 @@ namespace HP35
                 queue.remove();
             }
             queue.print();
+            queue.add(5);
+            queue.print();
+            queue.add(10);
         }
         
     }

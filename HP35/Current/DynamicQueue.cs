@@ -68,6 +68,7 @@ public class DynamicQueue<T>
             newarray[i] = array[index++];
         }
         firstElement = -1;
+        lastElement = firstElement + count;
         array = newarray;
     }
 
@@ -82,6 +83,7 @@ public class DynamicQueue<T>
         }
 
         firstElement = -1;
+        lastElement = firstElement + count;
         array = newarray;
     }
     
