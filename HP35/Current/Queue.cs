@@ -51,6 +51,21 @@ public class Queue<T>
     {
         return (frontOfQueue is null);
     }
-    
+
+    public void print()
+    {
+        Node next = frontOfQueue;
+        if (next is not null)
+        {
+            Console.Write($"{next.data}, ");
+        }
+
+        while (next.back is not null)
+        {
+            next = next.back;
+            Console.Write($"{next.data}, ");
+        }
+        Console.WriteLine();
+    }
     
 }
