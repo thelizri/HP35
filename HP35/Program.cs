@@ -9,20 +9,20 @@ namespace HP35
     {
         static void Main()
         {
-            var queue = new DynamicQueue<int>();
-            for (int i = 0; i < 20; i++)
+            var tree = new QueueTree();
+            tree.add(50,50);
+            tree.add(20,20);
+            tree.add(10,10);
+            tree.add(30,30);
+            tree.add(70,70);
+            tree.add(60,60);
+            tree.add(55,55);
+            tree.add(80,80);
+            tree.printLevelOrder();
+            foreach (int i in tree)
             {
-                queue.add(i);
+                Console.Write($"{i}, ");
             }
-            queue.print();
-            for (int i = 0; i < 19; i++)
-            {
-                queue.remove();
-            }
-            queue.print();
-            queue.add(5);
-            queue.print();
-            queue.add(10);
         }
         
     }
