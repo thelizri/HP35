@@ -147,7 +147,6 @@ public partial class QueueTree : IEnumerable<int>
         if (root is not null)
         {
             iterator.add(root);
-            addTreeToQueue(root);
         }
         return this;
     }
@@ -157,21 +156,17 @@ public partial class QueueTree : IEnumerable<int>
         return GetEnumerator();
     }
 
-    private void addTreeToQueue(Node node)
+    private void addChildNodesToQueue(Node node)
     {
+        if (node is null)
+            return;
         if (node.left is not null)
         {
-            queue.add(node.left);
             iterator.add(node.left);
         }
         if (node.right is not null)
         {
-            queue.add(node.right);
             iterator.add(node.right);
-        }
-        if (!queue.isEmpty())
-        {
-            addTreeToQueue(queue.remove());
         }
     }
 }
@@ -184,6 +179,7 @@ public partial class QueueTree : IEnumerator<int>
         if (!iterator.isEmpty())
         {
             Node node = iterator.remove();
+            addChildNodesToQueue(node);
             Current = node.data;
             return true;
         }
