@@ -1,4 +1,6 @@
-﻿namespace HP35.Current;
+﻿using System.Collections;
+
+namespace HP35.Current;
 
 public class TreeHeap
 {
@@ -12,10 +14,61 @@ public class TreeHeap
         public Node(int data)
         {
             this.data = data;
+            this.size = 1;
         }
     }
 
     private Node root;
+    private Queue queue;
+
+    public TreeHeap()
+    {
+        queue = new Queue();
+    }
+
+    public void push(int increment)
+    {
+        if (root is null)
+            return;
+        
+        root.data += increment;
+        if (root.left is not null)
+        {
+            if (root.left.data < root.data)
+            {
+                (root.data, root.left.data) = (root.left.data, root.data);
+                push(root.left);
+            }
+        }
+        if (root.right is not null)
+        {
+            if (root.right.data < root.data)
+            {
+                (root.data, root.right.data) = (root.right.data, root.data);
+                push(root.right);
+            }
+        }
+    }
+
+    private void push(Node node)
+    {
+        if (node.left is not null)
+        {
+            if (node.left.data < node.data)
+            {
+                (node.data, node.left.data) = (node.left.data, node.data);
+                push(node.left);
+            }
+        }
+        if (node.right is not null)
+        {
+            if (node.right.data < node.data)
+            {
+                (node.data, node.right.data) = (node.right.data, node.data);
+                push(node.right);
+            }
+        }
+    }
 
     public void add(int data)
     {
@@ -46,7 +99,7 @@ public class TreeHeap
         }
         else
         {
-            if (node.left.size < node.right.size)
+            if (node.left.size <= node.right.size)
             {
                 add(node.left, data);
             }
@@ -137,6 +190,27 @@ public class TreeHeap
         }
 
         return false;
+    }
+
+    public void print()
+    {
+        if (root is null)
+        {
+            Console.WriteLine("Empty");
+            return;
+        }
+        print(root);
+        Console.WriteLine();
+    }
+
+    private void print(Node node)
+    {
+        Console.Write($"{node.data}, ");
+
+        if (node.left is not null) queue.Enqueue(node.left);
+        if (node.right is not null) queue.Enqueue(node.right);
+
+        if (queue.Count > 0) print((Node)queue.Dequeue());
     }
     
 }
