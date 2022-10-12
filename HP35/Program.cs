@@ -10,18 +10,14 @@ namespace HP35
     {
         static void Main()
         {
-            Random ran = new Random();
-            var heap = new ArrayHeap();
-            for (int i = 0; i < 10; i++)
-            {
-                heap.add(ran.Next(1000));
-            }
+            var heap = treeHeap(10);
             heap.print();
             for (int i = 0; i < 10; i++)
             {
-                Console.Write($"{heap.remove()}, ");
+                heap.remove();
+                heap.print();
             }
-            Console.WriteLine();
+            
         }
         static void measure_time(bool sigfigs)
         {
@@ -29,6 +25,7 @@ namespace HP35
             int numberOfTests = 12; //n doubles every test
             int outerLoop = 10000;
             double previous = 0;
+            Random r = new Random();
 
             for (int i = 0; i < numberOfTests; i++)
             {
@@ -44,8 +41,9 @@ namespace HP35
                 for (int j = 0; j < outerLoop; j++)
                 {
                     //Prep work
-                    var heap = treeHeap(n);
-    
+                    var heap = arrayHeap(n);
+                    int add = r.Next();
+
                     //Measure the time
                     long t0 = Stopwatch.GetTimestamp();
                     heap.remove();
@@ -74,6 +72,17 @@ namespace HP35
         static TreeHeap treeHeap(int n)
         {
             var heap = new TreeHeap();
+            for (int i = 0; i < n; i++)
+            {
+                heap.add(i);
+            }
+
+            return heap;
+        }
+
+        static ArrayHeap arrayHeap(int n)
+        {
+            var heap = new ArrayHeap();
             for (int i = 0; i < n; i++)
             {
                 heap.add(i);

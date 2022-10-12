@@ -26,7 +26,7 @@ public class TreeHeap
         queue = new Queue();
     }
 
-    public void push(int increment)
+    public void increment(int increment)
     {
         if (root is null)
             return;
@@ -37,7 +37,7 @@ public class TreeHeap
             if (root.left.data < root.data)
             {
                 (root.data, root.left.data) = (root.left.data, root.data);
-                push(root.left);
+                this.increment(root.left);
             }
         }
         if (root.right is not null)
@@ -45,19 +45,19 @@ public class TreeHeap
             if (root.right.data < root.data)
             {
                 (root.data, root.right.data) = (root.right.data, root.data);
-                push(root.right);
+                this.increment(root.right);
             }
         }
     }
 
-    private void push(Node node)
+    private void increment(Node node)
     {
         if (node.left is not null)
         {
             if (node.left.data < node.data)
             {
                 (node.data, node.left.data) = (node.left.data, node.data);
-                push(node.left);
+                increment(node.left);
             }
         }
         if (node.right is not null)
@@ -65,7 +65,7 @@ public class TreeHeap
             if (node.right.data < node.data)
             {
                 (node.data, node.right.data) = (node.right.data, node.data);
-                push(node.right);
+                increment(node.right);
             }
         }
     }

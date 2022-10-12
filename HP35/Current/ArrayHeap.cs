@@ -13,7 +13,7 @@ public class ArrayHeap
     public ArrayHeap()
     {
         k = -1;
-        size = 10;
+        size = 16;
         array = new int[size];
     }
     
@@ -45,10 +45,21 @@ public class ArrayHeap
 
     public void add(int data)
     {
-        if (k >= size - 1) return;
+        if (k >= size - 1) doubleSize();
         k++;
         array[k] = data;
         bubble(k);
+    }
+
+    private void doubleSize()
+    {
+        size *= 2;
+        int[] array = new int[size];
+        for (int i = 0; i < this.array.Length; i++)
+        {
+            array[i] = this.array[i];
+        }
+        this.array = array;
     }
 
     private void bubble(int position)
@@ -121,6 +132,13 @@ public class ArrayHeap
             Console.Write($"{array[i]}, ");
         }
         Console.WriteLine();
+    }
+
+    public void increment(int increment)
+    {
+        if (k < 0) throw new Exception("Empty heap");
+        array[0] += increment;
+        sink(0);
     }
     
 }
