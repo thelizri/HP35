@@ -70,7 +70,8 @@ public class ArrayHeap
         var parentElement = array[parentIndex];
         if (newElement < parentElement)
         {
-            (array[position], array[parentIndex]) = (array[parentIndex], array[position]);
+            (array[position], array[parentIndex]) = 
+                (array[parentIndex], array[position]);
             bubble(parentIndex);
         }
     }
@@ -88,15 +89,11 @@ public class ArrayHeap
 
     private void sink(int position)
     {
-        if (position >= k)
-        {
-            return;
-        }
-        int leftP = leftBranch(position);
-        int rightP = leftP + 1;
+        if (position >= k) return;
+        var leftP = leftBranch(position);
+        var rightP = leftP + 1;
 
-
-        if (rightP<=k)
+        if (rightP <= k) //Making sure we're not going outside of the current bounds
         {
             if (array[leftP] < array[rightP])
             {
@@ -115,7 +112,7 @@ public class ArrayHeap
                 }
             }
         }
-        else if (leftP <= k)
+        else if (leftP <= k) //Making sure we're not going outside of the current bounds
         {
             if (array[leftP] < array[position])
             {

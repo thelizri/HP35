@@ -32,10 +32,10 @@ public class TreeHeap
             return 0;
         
         root.data += increment;
-        return this.increment(root);
+        return sink(root);
     }
 
-    private int increment(Node node)
+    private int sink(Node node)
     {
         if (isLeaf(node)) return 0;
         if (node.right is null)
@@ -43,7 +43,7 @@ public class TreeHeap
             if (node.left.data < node.data)
             {
                 (node.data, node.left.data) = (node.left.data, node.data);
-                return 1+increment(node.left);
+                return 1+sink(node.left);
             }
         }
         else if (node.left is null)
@@ -51,7 +51,7 @@ public class TreeHeap
             if (node.right.data < node.data)
             {
                 (node.data, node.right.data) = (node.right.data, node.data);
-                return 1+increment(node.right);
+                return 1+sink(node.right);
             }
         }
         else
@@ -61,7 +61,7 @@ public class TreeHeap
                 if (node.left.data < node.data)
                 {
                     (node.data, node.left.data) = (node.left.data, node.data);
-                    return 1+increment(node.left);
+                    return 1+sink(node.left);
                 }
             }
             else
@@ -69,7 +69,7 @@ public class TreeHeap
                 if (node.right.data < node.data)
                 {
                     (node.data, node.right.data) = (node.right.data, node.data);
-                    return 1+increment(node.right);
+                    return 1+sink(node.right);
                 }
             }
         }
