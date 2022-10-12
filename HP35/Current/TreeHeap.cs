@@ -26,87 +26,88 @@ public class TreeHeap
         queue = new Queue();
     }
 
-    public void increment(int increment)
+    public int increment(int increment)
     {
         if (root is null)
-            return;
+            return 0;
         
         root.data += increment;
-        if (root.left is not null)
-        {
-            if (root.left.data < root.data)
-            {
-                (root.data, root.left.data) = (root.left.data, root.data);
-                this.increment(root.left);
-            }
-        }
-        if (root.right is not null)
-        {
-            if (root.right.data < root.data)
-            {
-                (root.data, root.right.data) = (root.right.data, root.data);
-                this.increment(root.right);
-            }
-        }
+        return this.increment(root);
     }
 
-    private void increment(Node node)
+    private int increment(Node node)
     {
-        if (node.left is not null)
+        if (isLeaf(node)) return 0;
+        if (node.right is null)
         {
             if (node.left.data < node.data)
             {
                 (node.data, node.left.data) = (node.left.data, node.data);
-                increment(node.left);
+                return 1+increment(node.left);
             }
         }
-        if (node.right is not null)
+        else if (node.left is null)
         {
             if (node.right.data < node.data)
             {
                 (node.data, node.right.data) = (node.right.data, node.data);
-                increment(node.right);
+                return 1+increment(node.right);
             }
         }
+        else
+        {
+            if (node.left.data <= node.right.data)
+            {
+                if (node.left.data < node.data)
+                {
+                    (node.data, node.left.data) = (node.left.data, node.data);
+                    return 1+increment(node.left);
+                }
+            }
+            else
+            {
+                if (node.right.data < node.data)
+                {
+                    (node.data, node.right.data) = (node.right.data, node.data);
+                    return 1+increment(node.right);
+                }
+            }
+        }
+
+        return 0;
     }
 
-    public void add(int data)
+    public int add(int data)
     {
         if (root is null)
         {
             root = new Node(data);
+            return 0;
         }
         else
-        {
-            add(root, data);
-        }
+            return add(root, data);
     }
 
-    private void add(Node node, int data)
+    private int add(Node node, int data)
     {
         node.size++;
-        if (data < node.data)
-        {
-            (data, node.data) = (node.data, data);
-        }
+        if (data < node.data) (data, node.data) = (node.data, data);
         if (node.left is null)
         {
             node.left = new Node(data);
+            return 0;
         }
         else if (node.right is null)
         {
             node.right = new Node(data);
+            return 0;
         }
         else
         {
             if (node.left.size <= node.right.size)
-            {
-                add(node.left, data);
-            }
+                return 1+add(node.left, data);
             else
-            {
-                add(node.right, data);
-            }
+                return 1+add(node.right, data);
         }
     }
 
@@ -116,13 +117,13 @@ public class TreeHeap
             throw new Exception("Heap is empty");
         if (root.size == 1)
         {
-            int result = root.data;
+            var result = root.data;
             root = null;
             return result;
         }
         else
         {
-            int result = root.data;
+            var result = root.data;
             remove(root);
             return result;
         }
@@ -134,50 +135,54 @@ public class TreeHeap
         if (node.left is null)
         {
             //Promote right branch
-            promote(node, node.right);
+            swapValues(node, node.right);
             if (isLeaf(node.right))
             {
                 node.right = null;
                 return;
             }
+
             remove(node.right);
         }
         else if (node.right is null)
         {
             //Promote left branch
-            promote(node, node.left);
+            swapValues(node, node.left);
             if (isLeaf(node.left))
             {
                 node.left = null;
                 return;
             }
+
             remove(node.left);
         }
         else if (node.left.data <= node.right.data)
         {
             //Promote left branch
-            promote(node, node.left);
+            swapValues(node, node.left);
             if (isLeaf(node.left))
             {
                 node.left = null;
                 return;
             }
+
             remove(node.left);
         }
         else if (node.right.data < node.left.data)
         {
             //Promote right branch
-            promote(node, node.right);
+            swapValues(node, node.right);
             if (isLeaf(node.right))
             {
                 node.right = null;
                 return;
             }
+
             remove(node.right);
         }
     }
 
-    private void promote(Node node, Node promote)
+    private void swapValues(Node node, Node promote)
     {
         node.data = promote.data;
     }

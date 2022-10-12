@@ -10,14 +10,35 @@ namespace HP35
     {
         static void Main()
         {
-            var heap = treeHeap(10);
-            heap.print();
-            for (int i = 0; i < 10; i++)
+            depth_benchmark(10000);
+        }
+
+        static void depth_benchmark(int loop)
+        {
+            double meanIncrement = 0;
+            Random r = new Random();
+            for (int i = 0; i < loop; i++)
             {
-                heap.remove();
-                heap.print();
+                var heap = treeHeap(64);
+                int depth = heap.increment(r.Next(10, 21));
+                meanIncrement += depth;
             }
+
+            meanIncrement /= loop;
+
+            double meanAdd = 0;
+            for (int i = 0; i < loop; i++)
+            {
+                var heap = treeHeap(64);
+                int depth = heap.add(r.Next(10, 21));
+                meanAdd += depth;
+            }
+
+            meanAdd /= loop;
             
+            Console.WriteLine("Add depth is: "+meanAdd);
+            Console.WriteLine("Increment depth is: "+meanIncrement);
+
         }
         static void measure_time(bool sigfigs)
         {
@@ -68,15 +89,15 @@ namespace HP35
                 
             Latex.print();
         }
-
+        
         static TreeHeap treeHeap(int n)
         {
+            Random r = new Random();
             var heap = new TreeHeap();
             for (int i = 0; i < n; i++)
             {
-                heap.add(i);
+                heap.add(r.Next(101));
             }
-
             return heap;
         }
 
