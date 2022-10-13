@@ -10,44 +10,22 @@ namespace HP35
     {
         static void Main()
         {
-            depth_benchmark(10000);
+            measure_time(false);
         }
 
-        static void depth_benchmark(int loop)
-        {
-            double meanIncrement = 0;
-            Random r = new Random();
-            for (int i = 0; i < loop; i++)
-            {
-                var heap = treeHeap(64);
-                int depth = heap.increment(r.Next(10, 21));
-                meanIncrement += depth;
-            }
-
-            meanIncrement /= loop;
-
-            double meanAdd = 0;
-            for (int i = 0; i < loop; i++)
-            {
-                var heap = treeHeap(64);
-                int depth = heap.add(r.Next(10, 21));
-                meanAdd += depth;
-            }
-
-            meanAdd /= loop;
-            
-            Console.WriteLine("Add depth is: "+meanAdd);
-            Console.WriteLine("Increment depth is: "+meanIncrement);
-
-        }
+        
         static void measure_time(bool sigfigs)
         {
             int n = 10;
             int numberOfTests = 12; //n doubles every test
-            int outerLoop = 10000;
+            int outerLoop = 1000;
+            int innerLoop = 1000;
+            double difference = 0;
             double previous = 0;
-            Random r = new Random();
-
+    
+                
+            Random random = new Random();
+    
             for (int i = 0; i < numberOfTests; i++)
             {
                 double sum = 0;
@@ -63,50 +41,52 @@ namespace HP35
                 {
                     //Prep work
                     var heap = arrayHeap(n);
-                    int add = r.Next();
-
+                    var data = ArrayTools.create_unsorted_array(innerLoop);
+    
                     //Measure the time
                     long t0 = Stopwatch.GetTimestamp();
-                    heap.remove();
+                    for (int ii = 0; ii < innerLoop; ii++)
+                    {
+                            heap.add(data[ii]);
+                            heap.remove();
+                    }
                     long t1 = Stopwatch.GetTimestamp();
                     double time = (t1 - t0);
                         
                     //Stats
+                    time /= innerLoop;
                     sum += time;
                     max = Math.Max(max, time);
                     min = Math.Min(min, time);
                 }
-    
+                
                 mean = sum / outerLoop;
-                double difference = mean - previous;
+                difference = mean - previous;
                 previous = mean;
-                Console.WriteLine("n={0}, mean={1:0.##}, min={2:0.##}, " +
-                                  "max={3:0.##}, difference={4:0.##}",n,mean,min,max, difference);
-                Latex.addLine(n,mean,min, max, difference);
+                Latex.addLine(n,mean,min,max,sigfigs);
     
                 n *= 2;
             }
-                
             Latex.print();
         }
-        
+
         static TreeHeap treeHeap(int n)
         {
             Random r = new Random();
             var heap = new TreeHeap();
             for (int i = 0; i < n; i++)
             {
-                heap.add(r.Next(101));
+                heap.add(r.Next(100*n));
             }
             return heap;
         }
-
         static ArrayHeap arrayHeap(int n)
         {
+            Random r = new Random();
             var heap = new ArrayHeap();
             for (int i = 0; i < n; i++)
             {
-                heap.add(i);
+                heap.add(r.Next(100*n));
             }
 
             return heap;

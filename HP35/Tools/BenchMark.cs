@@ -10,6 +10,8 @@ public static class BenchMark
                 int numberOfTests = 12; //n doubles every test
                 int outerLoop = 1000;
                 int innerLoop = 1;
+                double previous = 0;
+                double difference = 0;
     
                 
                 Random random = new Random();
@@ -47,6 +49,8 @@ public static class BenchMark
                     }
     
                     mean = sum / outerLoop;
+                    difference = mean - previous;
+                    previous = mean;
                     Console.WriteLine("n={0}, mean={1:0.##}, min={2:0.##}, " +
                                       "max={3:0.##}",n,mean,min,max);
                     Latex.addLine(n,mean,min, max, sigfigs);
