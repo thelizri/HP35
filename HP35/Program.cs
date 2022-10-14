@@ -12,7 +12,8 @@ namespace HP35
         static void Main()
         {
             Zip zip = new Zip("postnummer.csv");
-            Console.WriteLine(zip.search("164 30"));
+            Console.WriteLine(zip.linearSearch("164 30"));
+            Console.WriteLine(zip.binary_search(16430));
         }
     }
 }

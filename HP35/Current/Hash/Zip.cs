@@ -4,7 +4,6 @@ public class Zip
 {
     private Node[] data;
     private readonly string fileAddress;
-    private readonly string directory;
 
     private class Node
     {
@@ -23,21 +22,30 @@ public class Zip
         {
             return $"{zipCode}, {cityName}, {key}";
         }
+
+        public int getZipCode()
+        {
+            return Int32.Parse(this.zipCode.Replace(" ",""));
+        }
     }
 
     public Zip(string file)
     {
-        this.data = new Node[10000];
-        this.directory = "C:\\Users\\karlw\\Documents\\Code\\C#\\HP35\\HP35\\Current\\Hash\\";
-        this.fileAddress = directory + file;
+        fileAddress = Path.GetFullPath(file);
+        Console.WriteLine(fileAddress);
         read();
     }
 
     private void read()
     {
-        if (!File.Exists(fileAddress)) return;
+        if (!File.Exists(fileAddress))
+        {
+            Console.WriteLine("File does not exist");
+            return;
+        }
         string[] lines = File.ReadAllLines(fileAddress);
         int i = 0;
+        this.data = new Node[lines.Length];
         foreach (string line in lines)
         {
             string[] row = line.Split(',');
@@ -45,7 +53,7 @@ public class Zip
         }
     }
 
-    public string search(string zipCode)
+    public string linearSearch(string zipCode)
     {
         for (int i = 0; i < data.Length; i++)
         {
@@ -53,5 +61,43 @@ public class Zip
         }
 
         return "No results";
+    }
+    
+    public string binary_search(int zipSearch)
+    {
+        int first = 0;
+        int last = data.Length - 1;
+
+        while (true)
+        {
+            int index = (first + last) / 2;
+            string zipCode = data[index].zipCode;
+            int zip = Int32.Parse(zipCode.Replace(" ",""));
+
+            if (zip == zipSearch)
+            {
+                return data[index].ToString();
+            }
+            else if (zipSearch<zip&&index<last)
+            {
+                last = index-1;
+            }
+            else if (zipSearch>zip&&index>first)
+            {
+                first = index+1;
+            }
+            else
+            {
+                if (data[first].key == zipSearch)
+                {
+                    return data[first].ToString();
+                }
+                if (data[last].key == zipSearch)
+                {
+                    return data[last].ToString();
+                }
+                
+            }
+        }
     }
 }
