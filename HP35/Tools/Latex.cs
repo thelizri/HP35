@@ -1,4 +1,5 @@
 ﻿using System.Text;
+using Microsoft.VisualBasic;
 
 namespace HP35;
 
@@ -19,6 +20,10 @@ public static class Latex
 
     private static List<string> info = new List<string>();
     private static List<string> just_numbers = new List<string>();
+    private static List<string> left_columns = new List<string>();
+    private static List<string> right_columns = new List<string>();
+    private static List<string> left_columns_numbers = new List<string>();
+    private static List<string> right_columns_numbers = new List<string>();
 
     public static void addLine(int n, double mean, double min, double max, bool sigfigs)
     {
@@ -55,6 +60,29 @@ public static class Latex
         just_numbers.Add(data);
     }
 
+    public static void leftColumns(int n, double mean, double difference)
+    {
+        string data = String.Format("{0:0.##} & {1:0.##} & {2:0.##} &",n,mean,difference);
+        left_columns.Add(data);
+    }
+
+    public static void rightColumns(double mean, double difference)
+    {
+        string data = String.Format("{0:0.##} & {1:0.##}\\\\ \\hline",mean,difference);
+        right_columns.Add(data);
+    }
+
+    public static void printComparison()
+    {
+        Console.WriteLine(table_upper);
+        for (int i = 0; i < left_columns.Count; i++)
+        {
+            string s = left_columns[i] + right_columns[i];
+            Console.WriteLine(s);
+        }
+        Console.WriteLine(table_bottom);
+    }
+    
     public static void print()
     {
         Console.WriteLine("\nLatex table\n");

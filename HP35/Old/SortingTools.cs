@@ -1,8 +1,10 @@
-﻿namespace HP35;
+﻿using System.Security.AccessControl;
 
-public class SortingTools
+namespace HP35;
+
+public static class SortingTools
 {
-    public void section_sort(int[] array)
+    public static void selection_sort(int[] array)
     {
         for (int i = 0; i < array.Length - 1; i++)
         {
@@ -19,7 +21,7 @@ public class SortingTools
         }
     }
 
-    public void insertion_sort(int[] array)
+    public static void insertion_sort(int[] array)
     {
         for (int i = 1; i < array.Length; i++)
         {
@@ -40,7 +42,7 @@ public class SortingTools
         }
     }
 
-    public void merge_sort(int[] array)
+    public static void merge_sort(int[] array)
     {
         if (array.Length < 2)
         {
@@ -50,7 +52,7 @@ public class SortingTools
         merge_sort(array, temp, 0,array.Length-1);
     }
 
-    private void merge_sort(int[] array, int[] temp, int left, int right)
+    private static void merge_sort(int[] array, int[] temp, int left, int right)
     {
         if (left >= right)
         {
@@ -63,7 +65,7 @@ public class SortingTools
         merge(array, temp, left, right);
     }
 
-    private void merge(int[] array, int[] temp, int left, int right)
+    private static void merge(int[] array, int[] temp, int left, int right)
     {
         int length = right - left + 1;
         int leftIndex = left;
@@ -111,5 +113,40 @@ public class SortingTools
         
         Array.Copy(temp, left, array, left, length);
     }
-   
+
+    public static void quicksort(int[] array)
+    {
+        quicksort(array, 0, array.Length-1);
+    }
+
+    private static void quicksort(int[] array, int left, int right)
+    {
+        if (left >= right)
+            return;
+        int pivot = partition(array,  left, right);
+        quicksort(array, pivot+1, right);
+        quicksort(array, left, pivot-1);
+    }
+
+    private static int partition(int[] array, int left, int right)
+    {
+        /*We move all the smaller elements to the left. The elements that are bigger than
+         the pivot value stay where they are. i keeps track of where we should swap the elements. 
+         Finally we swap the pivot value so that it is between the smaller values and bigger values.
+         */
+        int pivot_value = array[right];
+        int i = left;
+        while (left < right)
+        {
+            if (array[left] < pivot_value)
+            {
+                //Swap
+                (array[left], array[i]) = (array[i], array[left]);
+                i++;
+            }
+            left++;
+        }
+        (array[right], array[i]) = (array[i], array[right]);
+        return i;
+    }
 }
