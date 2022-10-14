@@ -8,15 +8,20 @@ public class Zip
 
     private class Node
     {
-        private String code;
-        private String name;
-        private int pop;
+        public String zipCode;
+        public String cityName;
+        public int key;
 
-        public Node(string code, string name, int pop)
+        public Node(string zipCode, string cityName, int key)
         {
-            this.code = code;
-            this.name = name;
-            this.pop = pop;
+            this.zipCode = zipCode;
+            this.cityName = cityName;
+            this.key = key;
+        }
+
+        public override string ToString()
+        {
+            return $"{zipCode}, {cityName}, {key}";
         }
     }
 
@@ -25,18 +30,28 @@ public class Zip
         this.data = new Node[10000];
         this.directory = "C:\\Users\\karlw\\Documents\\Code\\C#\\HP35\\HP35\\Current\\Hash\\";
         this.fileAddress = directory + file;
+        read();
     }
 
-    public void read()
+    private void read()
     {
         if (!File.Exists(fileAddress)) return;
         string[] lines = File.ReadAllLines(fileAddress);
         int i = 0;
         foreach (string line in lines)
         {
-            string[] row = line.Split(' ');
-            Console.WriteLine($"First: {row[0]}, Second: {row[1]}, Third: {row[2]},");
-            data[i++] = new Node(row[0], row[1], Int32.Parse(row[2]));
+            string[] row = line.Split(',');
+            data[i++] = new Node(row[0], row[1].Trim(), Int32.Parse(row[2]));
         }
+    }
+
+    public string search(string zipCode)
+    {
+        for (int i = 0; i < data.Length; i++)
+        {
+            if (zipCode.Equals(data[i].zipCode)) return data[i].ToString();
+        }
+
+        return "No results";
     }
 }

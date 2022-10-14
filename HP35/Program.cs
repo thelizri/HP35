@@ -11,8 +11,8 @@ namespace HP35
     {
         static void Main()
         {
-            Zip zip = new Zip("NewFile1.txt");
-            zip.read();
+            Zip zip = new Zip("postnummer.csv");
+            Console.WriteLine(zip.search("164 30"));
         }
     }
 }
