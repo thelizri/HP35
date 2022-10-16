@@ -7,11 +7,11 @@ public class Zip
 
     private class Node
     {
-        public String zipCode;
+        public int zipCode;
         public String cityName;
         public int key;
 
-        public Node(string zipCode, string cityName, int key)
+        public Node(int zipCode, string cityName, int key)
         {
             this.zipCode = zipCode;
             this.cityName = cityName;
@@ -22,17 +22,12 @@ public class Zip
         {
             return $"{zipCode}, {cityName}, {key}";
         }
-
-        public int getZipCode()
-        {
-            return Int32.Parse(this.zipCode.Replace(" ",""));
-        }
+        
     }
 
     public Zip(string file)
     {
         fileAddress = Path.GetFullPath(file);
-        Console.WriteLine(fileAddress);
         read();
     }
 
@@ -49,15 +44,15 @@ public class Zip
         foreach (string line in lines)
         {
             string[] row = line.Split(',');
-            data[i++] = new Node(row[0], row[1].Trim(), Int32.Parse(row[2]));
+            data[i++] = new Node(zipCode(row[0]), row[1].Trim(), Int32.Parse(row[2]));
         }
     }
 
-    public string linearSearch(string zipCode)
+    public string linearSearch(int zipCode)
     {
         for (int i = 0; i < data.Length; i++)
         {
-            if (zipCode.Equals(data[i].zipCode)) return data[i].ToString();
+            if (zipCode == data[i].zipCode) return data[i].ToString();
         }
 
         return "No results";
@@ -68,11 +63,10 @@ public class Zip
         int first = 0;
         int last = data.Length - 1;
 
-        while (true)
+        while (first<=last)
         {
             int index = (first + last) / 2;
-            string zipCode = data[index].zipCode;
-            int zip = Int32.Parse(zipCode.Replace(" ",""));
+            int zip = data[index].zipCode;
 
             if (zip == zipSearch)
             {
@@ -88,16 +82,22 @@ public class Zip
             }
             else
             {
-                if (data[first].key == zipSearch)
+                if (data[first].zipCode == zipSearch)
                 {
                     return data[first].ToString();
                 }
-                if (data[last].key == zipSearch)
+                if (data[last].zipCode == zipSearch)
                 {
                     return data[last].ToString();
                 }
-                
+                return "No results";
             }
         }
+        return "No results";
+    }
+
+    private int zipCode(string zip)
+    {
+        return Int32.Parse(zip.Replace(" ",""));
     }
 }
