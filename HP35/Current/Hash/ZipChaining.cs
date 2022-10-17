@@ -2,7 +2,7 @@
 
 namespace HP35.Current.Hash;
 
-public class Zip2
+public class ZipChaining
 {
     private Node[] data;
     private readonly string fileAddress;
@@ -33,7 +33,7 @@ public class Zip2
         
     }
 
-    public Zip2(string file, int modulo)
+    public ZipChaining(string file, int modulo)
     {
         fileAddress = Path.GetFullPath(file);
         this.modulo = modulo;

@@ -2,7 +2,7 @@
 
 namespace HP35.Current.Hash;
 
-public class Zip3
+public class ZipOpenAddressing
 {
     private Node[] data;
     private readonly string fileAddress;
@@ -34,7 +34,7 @@ public class Zip3
         
     }
 
-    public Zip3(string file, int modulo)
+    public ZipOpenAddressing(string file, int modulo)
     {
         fileAddress = Path.GetFullPath(file);
         this.modulo = modulo;
@@ -110,7 +110,6 @@ public class Zip3
             return "No such address";
 
         var i = 0;
-        index++;
         while (data[index] is not null && zip != data[index].zipCode && i < modulo)
         {
             index++;

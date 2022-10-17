@@ -11,8 +11,4 @@
       <None Include="bin\Debug\net6.0\postnummer.csv" />
     </ItemGroup>
 
-    <ItemGroup>
-      <Folder Include="Current\T9" />
-    </ItemGroup>
-
 </Project>
