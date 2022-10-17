@@ -109,7 +109,8 @@ public class Trie
         recursiveSearch(outcomes, 0, root, "");
     }
 
-    private void recursiveSearch(char[,] outcomes, int index, TrieNode node, string word)
+    private void recursiveSearch(char[,] outcomes, int index, 
+        TrieNode node, string wordResult)
     {
         int length = outcomes.GetLength(0);
         if (index < length)
@@ -117,24 +118,25 @@ public class Trie
             for (int i = 0; i < 3; i++)
             {
                 char c = outcomes[index, i];
-                var node2 = node.get(c);
-                if (node2 is not null)
+                var nodeFromCharacterArray = node.get(c);
+                if (nodeFromCharacterArray is not null)
                 {
-                    string temp = word + node2.character;
-                    recursiveSearch(outcomes, index + 1, node2, temp);
+                    string temp = wordResult + nodeFromCharacterArray.character;
+                    recursiveSearch(outcomes, index + 1,
+                        nodeFromCharacterArray, temp);
                 }
             }
         }
         else
         {
-            if(node.endOfWord) Console.WriteLine(word);
+            if(node.endOfWord) Console.WriteLine(wordResult);
             for (int i = 0; i < 30; i++)
             {
-                var node2 = node.get(i);
-                if (node2 is not null)
+                var innerNode = node.get(i);
+                if (innerNode is not null)
                 {
-                    string temp = word + node2.character;
-                    recursiveSearch(outcomes, index + 1, node2, temp);
+                    string temp = wordResult + innerNode.character;
+                    recursiveSearch(outcomes, index + 1, innerNode, temp);
                 }
             }
         }
