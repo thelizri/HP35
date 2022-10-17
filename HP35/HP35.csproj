@@ -11,4 +11,8 @@
       <None Include="bin\Debug\net6.0\postnummer.csv" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Content Include="bin\Debug\net6.0\kelly.txt" />
+    </ItemGroup>
+
 </Project>

@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\karlw\\RiderProjects\\HP35\\HP35\\HP35.csproj": {}
+    "C:\\Users\\karlw\\Documents\\Code\\C#\\HP35\\HP35\\HP35.csproj": {}
   },
   "projects": {
-    "C:\\Users\\karlw\\RiderProjects\\HP35\\HP35\\HP35.csproj": {
+    "C:\\Users\\karlw\\Documents\\Code\\C#\\HP35\\HP35\\HP35.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\karlw\\RiderProjects\\HP35\\HP35\\HP35.csproj",
+        "projectUniqueName": "C:\\Users\\karlw\\Documents\\Code\\C#\\HP35\\HP35\\HP35.csproj",
         "projectName": "HP35",
-        "projectPath": "C:\\Users\\karlw\\RiderProjects\\HP35\\HP35\\HP35.csproj",
+        "projectPath": "C:\\Users\\karlw\\Documents\\Code\\C#\\HP35\\HP35\\HP35.csproj",
         "packagesPath": "C:\\Users\\karlw\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\karlw\\RiderProjects\\HP35\\HP35\\obj\\",
+        "outputPath": "C:\\Users\\karlw\\Documents\\Code\\C#\\HP35\\HP35\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\karlw\\AppData\\Roaming\\NuGet\\NuGet.Config"
@@ -43,8 +43,7 @@
             "net47",
             "net471",
             "net472",
-            "net48",
-            "net481"
+            "net48"
           ],
           "assetTargetFallback": true,
           "warn": true,
@@ -53,7 +52,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Users\\karlw\\.dotnet\\sdk\\6.0.400\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files (x86)\\dotnet\\sdk\\6.0.300\\RuntimeIdentifierGraph.json"
         }
       }
     }

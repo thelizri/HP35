@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.Text;
 
 namespace HP35.Current.T9;
 
@@ -10,24 +11,44 @@ public class Trie
         public bool endOfWord;
         public char character;
 
-        public TrieNode(char c='R')
+        public TrieNode(char c='A')
         {
-            array = new TrieNode[26];
+            array = new TrieNode[30];
             endOfWord = false;
             character = c;
         }
 
         public TrieNode get(char c)
         {
-            int index = c - 'a';
+            int index = calcIndex(c);
+            if (index < 0 || index > 29) return null;
+            return array[index];
+        }
+        
+        public TrieNode get(int index)
+        {
+            if (index < 0 || index > 29) return null;
             return array[index];
         }
 
-        public void add(char c)
+        public bool add(char c)
         {
-            int index = c - 'a';
-            if (array[index] is not null) return;
+            int index = calcIndex(c);
+            if (index < 0 || index > 29) return false;
+            if (array[index] is not null) return true;
             array[index] = new TrieNode(c);
+            return true;
+        }
+
+        private int calcIndex(char c)
+        {
+            int index;
+            if (c == 'å') index = 26;
+            else if (c == 'ä') index = 27;
+            else if (c == 'ö') index = 28;
+            else if (c == ' ') index = 29;
+            else index = c - 'a';
+            return index;
         }
     }
 
@@ -36,20 +57,42 @@ public class Trie
     public Trie()
     {
         root = new TrieNode();
+        string fileAddress = Path.GetFullPath("kelly.txt");
+        //read(fileAddress);
+    }
+    
+    private void read(string fileAddress)
+    {
+        if (!File.Exists(fileAddress))
+        {
+            Console.WriteLine("File does not exist");
+            return;
+        }
+        string[] lines = File.ReadAllLines(fileAddress);
+        foreach (string line in lines)
+        {
+            addWord(line.Trim().ToLower());
+        }
     }
 
     public void addWord(string word)
     {
-        word = word.ToLower();
-        var node = root;
-        char c;
-        for (int i = 0; i < word.Length; i++)
+        try
         {
-            c = word[i];
-            node.add(c);
-            node = node.get(c);
+            var node = root;
+            char c;
+            for (int i = 0; i < word.Length; i++)
+            {
+                c = word[i];
+                if(node.add(c)) node = node.get(c);
+            }
+
+            node.endOfWord = true;
         }
-        node.endOfWord = true;
+        catch(Exception e)
+        {
+            Console.WriteLine("Error with this word: "+word);
+        }
     }
 
     public void searchForWord(string sequence)
@@ -77,7 +120,7 @@ public class Trie
                 var node2 = node.get(c);
                 if (node2 is not null)
                 {
-                    string temp = word + c;
+                    string temp = word + node2.character;
                     recursiveSearch(outcomes, index + 1, node2, temp);
                 }
             }
@@ -85,16 +128,14 @@ public class Trie
         else
         {
             if(node.endOfWord) Console.WriteLine(word);
-            char c = 'a';
-            for (int i = 0; i < 26; i++)
+            for (int i = 0; i < 30; i++)
             {
-                var node2 = node.get(c);
+                var node2 = node.get(i);
                 if (node2 is not null)
                 {
-                    string temp = word + c;
+                    string temp = word + node2.character;
                     recursiveSearch(outcomes, index + 1, node2, temp);
                 }
-                c = (char)(c + 1);
             }
         }
     }
@@ -109,8 +150,9 @@ public class Trie
         if(number==5) return new char[] { 'm', 'n', 'o' };
         if(number==6) return new char[] { 'p', 'q', 'r' };
         if(number==7) return new char[] { 's', 't', 'u' };
-        if(number==8) return new char[] { 'v', 'w' ,'w'};
-        if(number==9) return new char[] { 'x','y', 'z' };
+        if(number==8) return new char[] { 'v', 'w' ,'x'};
+        if(number==9) return new char[] { 'y','z', 'å' };
+        if(number==0) return new char[] { 'ä','ö', ' ' };
         throw new Exception("Fuck");
     }
 }
