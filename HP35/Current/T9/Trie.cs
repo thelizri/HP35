@@ -68,9 +68,9 @@ public class Trie
 
     private void recursiveSearch(char[,] outcomes, int index, TrieNode node, string word)
     {
-        if (index < outcomes.GetLength(0))
+        int length = outcomes.GetLength(0);
+        if (index < length)
         {
-            if(node.endOfWord) Console.WriteLine(word);
             for (int i = 0; i < 3; i++)
             {
                 char c = outcomes[index, i];

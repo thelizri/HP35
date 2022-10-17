@@ -11,6 +11,8 @@ namespace HP35
             Trie trie = new Trie();
             trie.addWord("Hello");
             trie.addWord("main");
+            trie.addWord("a");
+            trie.addWord("aa");
             trie.addWord("aaa");
             trie.addWord("aaab");
             trie.addWord("aaakjsf");
