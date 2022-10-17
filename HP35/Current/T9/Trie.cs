@@ -58,7 +58,7 @@ public class Trie
     {
         root = new TrieNode();
         string fileAddress = Path.GetFullPath("kelly.txt");
-        //read(fileAddress);
+        read(fileAddress);
     }
     
     private void read(string fileAddress)

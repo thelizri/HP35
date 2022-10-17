@@ -14,10 +14,7 @@ namespace HP35
         static void Main()
         {
             var trie = new Trie();
-            trie.addWord("minister of something");
             trie.searchForWord("5353");
-            trie.addWord("hejsan välkommen");
-            trie.searchForWord(translate("hejsan"));
         }
 
         static string translate(string word)
