@@ -11,7 +11,12 @@ public class Trie
         public bool endOfWord;
         public char character;
 
-        public TrieNode(char c='A')
+        public TrieNode()
+        {
+            array = new TrieNode[30];
+            endOfWord = false;
+        }
+        public TrieNode(char c)
         {
             array = new TrieNode[30];
             endOfWord = false;
