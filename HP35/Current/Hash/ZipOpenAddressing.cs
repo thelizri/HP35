@@ -8,7 +8,7 @@ public class ZipOpenAddressing
     private readonly string fileAddress;
     private readonly int modulo;
     private int numberOfAddresses;
-    private int sum;
+    public int sum;
 
     private class Node
     {
