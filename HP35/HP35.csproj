@@ -13,6 +13,7 @@
 
     <ItemGroup>
       <Content Include="bin\Debug\net6.0\kelly.txt" />
+      <Content Include="bin\Debug\net6.0\trains.csv" />
     </ItemGroup>
 
 </Project>
