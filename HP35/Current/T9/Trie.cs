@@ -7,7 +7,7 @@ public class Trie
 {
     public class TrieNode
     {
-        private TrieNode[] array;
+        public TrieNode[] array;
         public bool endOfWord;
         public char character;
 
@@ -150,16 +150,70 @@ public class Trie
     private char[] numberToChar(char c)
     {
         int number = c - '0';
-        if(number==1) return new char[] { 'a', 'b', 'c' };
-        if(number==2) return new char[] { 'd', 'e', 'f' };
-        if(number==3) return new char[] { 'g', 'h', 'i' };
-        if(number==4) return new char[] { 'j', 'k', 'l' };
-        if(number==5) return new char[] { 'm', 'n', 'o' };
-        if(number==6) return new char[] { 'p', 'q', 'r' };
-        if(number==7) return new char[] { 's', 't', 'u' };
-        if(number==8) return new char[] { 'v', 'w' ,'x'};
-        if(number==9) return new char[] { 'y','z', 'å' };
-        if(number==0) return new char[] { 'ä','ö', ' ' };
-        throw new Exception("Fuck");
+        switch (number)
+        {
+            case 1: return new[] { 'a', 'b', 'c' };
+            case 2: return new[] { 'd', 'e', 'f' };
+            case 3: return new[] { 'g', 'h', 'i' };
+            case 4: return new[] { 'j', 'k', 'l' };
+            case 5: return new[] { 'm', 'n', 'o' };
+            case 6: return new[] { 'p', 'q', 'r' };
+            case 7: return new[] { 's', 't', 'u' };
+            case 8: return new[] { 'v', 'w', 'x' };
+            case 9: return new[] { 'y', 'z', 'å' };
+            case 0: return new[] { 'ä', 'ö', ' ' };
+            default: throw new ArgumentException
+                ("Number can't be converted to character");
+        }
+    }
+
+    public void searchWithoutPrediction(string sequence)
+    {
+        searchWithoutPrediction(sequence, root,"");
+    }
+
+    private void searchWithoutPrediction(string sequence, TrieNode node, string word)
+    {
+        if(node.endOfWord) Console.WriteLine(word);
+        if (sequence.Equals("")) return;
+
+        char[] array = numberToChar(sequence[0]);
+        foreach (char ch in array)
+        {
+            TrieNode nextNode = node.get(ch);
+            if(nextNode is not null) searchWithoutPrediction
+                (sequence.Substring(1), nextNode,word+nextNode.character);
+        }
+    }
+
+    public void searchWithPrediction(string sequence)
+    {
+        searchWithPrediction(sequence, root, "");
+    }
+
+    private void searchWithPrediction(string sequence, TrieNode node, string word)
+    {
+        if (sequence.Equals(""))
+        {
+            prediction(node, word);
+            return;
+        }
+
+        var array = numberToChar(sequence[0]);
+        foreach (var ch in array)
+        {
+            var nextNode = node.get(ch);
+            if (nextNode is not null)
+                searchWithPrediction
+                    (sequence.Substring(1), nextNode, word + nextNode.character);
+        }
+    }
+
+    private void prediction(TrieNode node, string word)
+    {
+        if (node.endOfWord) Console.WriteLine(word);
+        foreach (var next in node.array)
+            if (next is not null)
+                prediction(next, word + next.character);
     }
 }

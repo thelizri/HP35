@@ -13,7 +13,11 @@ namespace HP35
     {
         static void Main()
         {
-            
+            Trie trie = new Trie();
+            Console.WriteLine("Search Without Prediction");
+            trie.searchWithoutPrediction("356");
+            Console.WriteLine("\nSearch With Prediction");
+            trie.searchWithPrediction("356");
         }
         
     }

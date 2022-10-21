@@ -2,6 +2,7 @@
 
 public class Graph
 {
+    public Edge[] cities;
     public class Edge
     {
         public Node a;
@@ -19,10 +20,12 @@ public class Graph
     public class Node
     {
         public List<Edge> adjacencyList;
+        public string city;
 
-        public Node()
+        public Node(string city)
         {
             adjacencyList = new List<Edge>();
+            this.city = city;
         }
 
         public void addConnection(Node node, int weight)
