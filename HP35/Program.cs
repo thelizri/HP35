@@ -14,8 +14,9 @@ namespace HP35
     {
         static void Main()
         {
-            Graph graph = new Graph();
-            graph.print();
+            var graph = new Graph();
+            graph.depthFirstSearch("Stockholm");
+            graph.depthFirstSearch("Stockholm");
         }
         
     }
