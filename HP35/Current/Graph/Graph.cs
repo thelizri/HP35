@@ -209,7 +209,11 @@ public class Graph
     {
         foreach (var city in cities)
         {
-            if (city is not null) city.visited = false;
+            if (city is not null)
+            {
+                city.visited = false;
+                city.instantiated = false;
+            }
         }
     }
 
