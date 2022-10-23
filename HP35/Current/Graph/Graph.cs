@@ -5,6 +5,8 @@ public class Graph
     public CityNode[] cities;
     private readonly string fileAddress;
     private static int globalCount;
+    private CityNode[] minPath;
+    private int maxDepthSearch;
     public class Edge
     {
         public CityNode a;
@@ -97,9 +99,64 @@ public class Graph
             while (enumerator.MoveNext())
             {
                 CityNode destination = enumerator.Current.getDestination(this);
-                if (!destination.visited) return destination;
+                if (!destination.visited)
+                {
+                    destination.visited = true;
+                    return destination;
+                }
             }
             return null;
+        }
+        
+        public CityNode getNextUnvisitedCity(out int distance)
+        {
+            if (!instantiated)
+            {
+                instantiated = true;
+                enumerator = adjacencyList.GetEnumerator();
+            }
+            while (enumerator.MoveNext())
+            {
+                CityNode destination = enumerator.Current.getDestination(this);
+                if (!destination.visited)
+                {
+                    distance = enumerator.Current.weight;
+                    return destination;
+                }
+            }
+            distance = 0;
+            return null;
+        }
+
+        public CityNode getClosestUnvisitedCity()
+        {
+            int min = Int32.MaxValue;
+            CityNode closestCity = null;
+            foreach (var edge in adjacencyList)
+            {
+                var city = edge.getDestination(this);
+                if (!city.visited)
+                {
+                    if (edge.weight < min)
+                    {
+                        min = edge.weight;
+                        closestCity = city;
+                    }
+                }
+            }
+            if (closestCity is not null) 
+                closestCity.visited = true;
+            return closestCity;
+        }
+
+        public int getDistanceToNode(CityNode neighbor)
+        {
+            foreach (var edge in adjacencyList)
+            {
+                if (neighbor.Equals(edge.getDestination(this)))
+                    return edge.weight;
+            }
+            throw new Exception("Fuck myself in the ass");
         }
     }
     
@@ -120,14 +177,14 @@ public class Graph
         foreach (string line in lines)
         {
             var rows = line.Split(',');
-            CityNode a = addCity(rows[0]);
-            CityNode b = addCity(rows[1]);
+            CityNode a = addOrGetCity(rows[0]);
+            CityNode b = addOrGetCity(rows[1]);
             Edge edge = new Edge(a, b, Int32.Parse(rows[2]));
             edge.addItSelf();
         }
     }
 
-    private CityNode addCity(string name)
+    private CityNode addOrGetCity(string name)
     {
         CityNode result = new CityNode(name);
         int index = hash(name);
@@ -171,18 +228,18 @@ public class Graph
         return result;
     }
     
-    public void depthFirstSearch(string cityName)
+    public void depthFirstSearchTest(string cityName)
     {
         globalCount = 1;
         var city = lookup(cityName);
         var stack = new Stack<CityNode>();
         Console.WriteLine(city);
         stack.Push(city);
-        depthFirstSearch(city.getNextUnvisitedCity(), stack);
+        depthFirstSearchTest(city.getNextUnvisitedCity(), stack);
         reset();
     }
 
-    private void depthFirstSearch(CityNode node, Stack<CityNode> stack)
+    private void depthFirstSearchTest(CityNode node, Stack<CityNode> stack)
     {
         if (node is null)
         {
@@ -195,13 +252,66 @@ public class Graph
 
             Console.WriteLine(node);
             stack.Push(node);
-            depthFirstSearch(node.getNextUnvisitedCity(), stack);
+            depthFirstSearchTest(node.getNextUnvisitedCity(), stack);
         }
         else
         {
             Console.WriteLine(node);
             stack.Push(node);
-            depthFirstSearch(node.getNextUnvisitedCity(), stack);
+            depthFirstSearchTest(node.getNextUnvisitedCity(), stack);
+        }
+    }
+    
+    public void depthFirstSearch(string cityStart, string cityDestination, int max)
+    {
+        var start = lookup(cityStart);
+        var destination = lookup(cityDestination);
+        maxDepthSearch = max;
+        var stack = new Stack<CityNode>();
+        start.visited = true;
+        stack.Push(start);
+        var next = start.getNextUnvisitedCity();
+        stack.Push(next);
+        if (findDestination(next, destination, 1,stack))
+        {
+            int ii = 0;
+            int totalDistance = calculateDistance();
+            Console.WriteLine("Total distance is: "+totalDistance);
+            for (int i = minPath.Length - 1; i >= 0; i--)
+            {
+                var node = minPath[i];
+                Console.Write(node+", ");
+                if (ii++ > 5)
+                {
+                    ii = 0;
+                    Console.WriteLine();
+                }
+            }
+        }
+        reset();
+    }
+
+    private bool findDestination(CityNode current, CityNode destination,
+         int depth, Stack<CityNode> stack)
+    {
+        if (depth > maxDepthSearch) return false;
+        var next = current.getClosestUnvisitedCity();
+        while (next is null)
+        {
+            if (stack.Count <= 0) return false;
+            stack.Pop();
+            current = stack.Peek();
+            next = current.getClosestUnvisitedCity();
+        }
+        stack.Push(next);
+        if (next.Equals(destination))
+        {
+            minPath = stack.ToArray();
+            return true;
+        }
+        else
+        {
+            return findDestination(next, destination,  depth + 1, stack);
         }
     }
 
@@ -215,6 +325,17 @@ public class Graph
                 city.instantiated = false;
             }
         }
+    }
+
+    private int calculateDistance()
+    {
+        int distance = 0;
+        for (int i = 0; i < minPath.Length - 1; i++)
+        {
+            var city = minPath[i];
+            distance += city.getDistanceToNode(minPath[i + 1]);
+        }
+        return distance;
     }
 
 }
