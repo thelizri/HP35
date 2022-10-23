@@ -128,8 +128,17 @@ public class Graph
             return null;
         }
 
-        public CityNode getClosestUnvisitedCity()
+        public CityNode getClosestUnvisitedCity(CityNode destination)
         {
+            foreach (var edge in adjacencyList)
+            {
+                CityNode node = edge.getDestination(this);
+                if (node.Equals(destination))
+                {
+                    destination.visited = true;
+                    return destination;
+                }
+            }
             int min = Int32.MaxValue;
             CityNode closestCity = null;
             foreach (var edge in adjacencyList)
@@ -270,13 +279,37 @@ public class Graph
         var stack = new Stack<CityNode>();
         start.visited = true;
         stack.Push(start);
-        var next = start.getNextUnvisitedCity();
+        var next = start.getClosestUnvisitedCity(destination);
         stack.Push(next);
-        if (findDestination(next, destination, 1,stack))
+        if (next.Equals(destination))
+        {
+            minPath = stack.ToArray();
+            int ii = 0;
+            int totalDistance = calculateDistance();
+            var time = TimeSpan.FromMinutes(totalDistance);
+            Console.WriteLine($"It takes {time.Hours} hours and {time.Minutes} minutes to travel between {start} and {destination}.");
+            Console.WriteLine("Path: ");
+            for (int i = minPath.Length - 1; i >= 1; i--)
+            {
+                var node = minPath[i];
+                if (ii++ > 8)
+                {
+                    ii = 0;
+                    Console.WriteLine(node+", ");
+                }
+                else
+                {
+                    Console.Write(node+", ");
+                }
+            }
+            Console.Write(minPath[0]+".");
+        }
+        else if (findDestination(next, destination, 1,stack))
         {
             int ii = 0;
             int totalDistance = calculateDistance();
             var time = TimeSpan.FromMinutes(totalDistance);
+            Console.WriteLine($"Total minutes to travel: {totalDistance}");
             Console.WriteLine($"It takes {time.Hours} hours and {time.Minutes} minutes to travel between {start} and {destination}.");
             Console.WriteLine("Path: ");
             for (int i = minPath.Length - 1; i >= 1; i--)
@@ -301,13 +334,13 @@ public class Graph
          int depth, Stack<CityNode> stack)
     {
         if (depth > maxDepthSearch) return false;
-        var next = current.getClosestUnvisitedCity();
+        var next = current.getClosestUnvisitedCity(destination);
         while (next is null)
         {
             if (stack.Count <= 0) return false;
             stack.Pop();
             current = stack.Peek();
-            next = current.getClosestUnvisitedCity();
+            next = current.getClosestUnvisitedCity(destination);
         }
         stack.Push(next);
         if (next.Equals(destination))
