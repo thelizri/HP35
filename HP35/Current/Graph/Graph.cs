@@ -70,7 +70,7 @@ public class Graph
         public override string ToString()
         {
             visited = true;
-            return city+", "+globalCount++;
+            return city;
         }
 
         public CityNode getNextCity()
@@ -276,17 +276,23 @@ public class Graph
         {
             int ii = 0;
             int totalDistance = calculateDistance();
-            Console.WriteLine("Total distance is: "+totalDistance);
-            for (int i = minPath.Length - 1; i >= 0; i--)
+            var time = TimeSpan.FromMinutes(totalDistance);
+            Console.WriteLine($"It takes {time.Hours} hours and {time.Minutes} minutes to travel between {start} and {destination}.");
+            Console.WriteLine("Path: ");
+            for (int i = minPath.Length - 1; i >= 1; i--)
             {
                 var node = minPath[i];
-                Console.Write(node+", ");
-                if (ii++ > 5)
+                if (ii++ > 8)
                 {
                     ii = 0;
-                    Console.WriteLine();
+                    Console.WriteLine(node+", ");
+                }
+                else
+                {
+                    Console.Write(node+", ");
                 }
             }
+            Console.Write(minPath[0]+".");
         }
         reset();
     }
