@@ -14,8 +14,12 @@ namespace HP35
     {
         static void Main()
         {
-            var graph = new Graph();
-            graph.depthFirstSearch("Lund","Ånge",100);
+            var graph = new GraphNoLoop();
+            long t0 = Stopwatch.GetTimestamp();
+            graph.depthFirstSearch("Lund","Ånge",11);
+            long t1 = Stopwatch.GetTimestamp();
+            double time = (t1 - t0);
+            Console.WriteLine(time);
         }
         
     }
