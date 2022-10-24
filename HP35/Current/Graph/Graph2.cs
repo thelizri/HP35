@@ -7,13 +7,13 @@ public class Graph2
     private CityNode[] minPath;
     private int minimumTime;
     private int maxDepthSearch;
-    public class Edge
+    public class RailroadConnection
     {
         public CityNode a;
         public CityNode b;
         public int weight;
 
-        public Edge(CityNode a, CityNode b, int weight)
+        public RailroadConnection(CityNode a, CityNode b, int weight)
         {
             this.a = a;
             this.b = b;
@@ -32,11 +32,8 @@ public class Graph2
 
     public class CityNode
     {
-        public List<Edge> adjacencyList;
+        public List<RailroadConnection> adjacencyList;
         public readonly string city;
-        public bool visited;
-        public bool instantiated;
-        public List<Edge>.Enumerator enumerator;
 
         protected bool Equals(CityNode other)
         {
@@ -58,14 +55,12 @@ public class Graph2
 
         public CityNode(string city)
         {
-            adjacencyList = new List<Edge>();
+            adjacencyList = new List<RailroadConnection>();
             this.city = city;
-            visited = false;
         }
 
         public override string ToString()
         {
-            visited = true;
             return city;
         }
 
@@ -110,7 +105,7 @@ public class Graph2
             var rows = line.Split(',');
             CityNode a = addOrGetCity(rows[0]);
             CityNode b = addOrGetCity(rows[1]);
-            Edge edge = new Edge(a, b, Int32.Parse(rows[2]));
+            RailroadConnection railroadConnection = new RailroadConnection(a, b, Int32.Parse(rows[2]));
         }
     }
 
@@ -202,7 +197,6 @@ public class Graph2
         foreach (var city in neighbors)
         {
             if (city.Equals(previous)) continue;
-            //Clone path then add node to path
             var clone = path.ToList();
             clone.Add(city);
             findDestination(current, city, destination,

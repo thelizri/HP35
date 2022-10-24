@@ -7,13 +7,13 @@ public class GraphNoLoop
     private CityNode[] minPath;
     private int minimumTime;
     private int maxDepthSearch;
-    public class Edge
+    public class RailRoadConnection
     {
         public CityNode a;
         public CityNode b;
         public int weight;
 
-        public Edge(CityNode a, CityNode b, int weight)
+        public RailRoadConnection(CityNode a, CityNode b, int weight)
         {
             this.a = a;
             this.b = b;
@@ -32,12 +32,8 @@ public class GraphNoLoop
 
     public class CityNode
     {
-        public List<Edge> adjacencyList;
+        public List<RailRoadConnection> adjacencyList;
         public readonly string city;
-        public bool visited;
-        public bool instantiated;
-        public List<Edge>.Enumerator enumerator;
-
         protected bool Equals(CityNode other)
         {
             return city.Equals(other.city);
@@ -58,14 +54,12 @@ public class GraphNoLoop
 
         public CityNode(string city)
         {
-            adjacencyList = new List<Edge>();
+            adjacencyList = new List<RailRoadConnection>();
             this.city = city;
-            visited = false;
         }
 
         public override string ToString()
         {
-            visited = true;
             return city;
         }
 
@@ -110,7 +104,7 @@ public class GraphNoLoop
             var rows = line.Split(',');
             CityNode a = addOrGetCity(rows[0]);
             CityNode b = addOrGetCity(rows[1]);
-            Edge edge = new Edge(a, b, Int32.Parse(rows[2]));
+            RailRoadConnection railRoadConnection = new RailRoadConnection(a, b, Int32.Parse(rows[2]));
         }
     }
 
@@ -157,7 +151,6 @@ public class GraphNoLoop
             throw new ArgumentException($"City \"{name}\" does not exist");
         return result;
     }
-    
     
     public void depthFirstSearch(string cityStart, string cityDestination, int max)
     {
