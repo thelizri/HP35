@@ -5,10 +5,7 @@ namespace HP35.Current.Djikstra;
 public class Djikstra
 {
     private const int ARRAYSIZE = 541;
-    public CityNode[] cities;
-    private CityNode[] minPath;
-    private int minimumTime;
-    private int maxDepthSearch;
+    private CityNode[] cities;
     private readonly string fileAddress;
 
     public Djikstra()
@@ -61,104 +58,29 @@ public class Djikstra
         return hash % ARRAYSIZE; //ARRAYSIZE is 541
     }
 
-    private CityNode lookup(string name)
+    private CityNode lookupCity(string name)
     {
         CityNode result = cities[hash(name)];
         if (result is null || !name.Equals(result.city))
             throw new ArgumentException($"City \"{name}\" does not exist");
         return result;
     }
-    
-    public void depthFirstSearch(string cityStart, string cityDestination, int max)
-    {
-        var start = lookup(cityStart);
-        var destination = lookup(cityDestination);
-        maxDepthSearch = max;
-        minimumTime = Int32.MaxValue;
-        minPath = null;
-        var path = new List<CityNode>();
-        path.Add(start);
-        findDestination(null,start, destination, 1, path);
-        if (minPath is not null)
-        {
-            Console.WriteLine($"Total minutes to travel: {minimumTime}");
-            var time = TimeSpan.FromMinutes(minimumTime);
-            Console.WriteLine($"It takes {time.Hours} hours and {time.Minutes} minutes to travel between {start} and {destination}.");
-            Console.WriteLine("Path: ");
-            foreach (var city in minPath)
-            {
-                Console.Write($"{city}, ");
-            }
-            Console.WriteLine();
-        }
-    }
 
-    private void findDestination(CityNode previous, CityNode current, CityNode destination,
-         int depth, List<CityNode> path)
+    public void search(string cityA, string cityB)
     {
-        if (current.Equals(destination))
-        {
-            int distance = calculateDistance(path);
-            if (distance < minimumTime)
-            {
-                minimumTime = distance;
-                minPath = path.ToArray();
-            }
-
-            return;
-        }
-        if (depth > maxDepthSearch) return;
-        if (amIWalkingInCircles(path, current)) return;
-        var neighbors = current.getNeighbors();
-        foreach (var city in neighbors)
-        {
-            if (city.Equals(previous)) continue;
-            //Clone path then add node to path
-            var clone = path.ToList();
-            clone.Add(city);
-            findDestination(current, city, destination,
-                depth+1, clone);
-        }
-    }
-
-    private int calculateDistance(List<CityNode> path)
-    {
-        int distance = 0;
-        for (int i = 0; i < path.Count - 1; i++)
-        {
-            var city = path[i];
-            distance += city.getDistanceToNode(path[i+1]);
-        }
-        return distance;
-    }
-
-    private bool amIWalkingInCircles(List<CityNode> path, CityNode node)
-    {
-        for (int i = 0; i < path.Count - 1; i++)
-        {
-            if (node.Equals(path[i])) return true;
-        }
-        return false;
-    }
-
-    public void searchMinPath(string cityA, string cityB)
-    {
-        CityNode start = lookup(cityA);
-        CityNode destination = lookup(cityB);
+        CityNode start = lookupCity(cityA);
+        CityNode destination = lookupCity(cityB);
         
-        List<CityNode> unvisited = new List<CityNode>();
+        //List<CityNode> unvisited = new List<CityNode>();
+        var unvisited = cities.ToArray();
         Table[] pathTable = new Table[ARRAYSIZE];
-        
-        unvisited.Add(start);
-        int index = start.hashCode;
-        pathTable[index] = new Table(start, 0);
-        
+
+        pathTable[start.hashCode] = new Table(start, 0);
         foreach (var city in cities)
         {
             if (city is not null && !city.Equals(start))
             {
-                unvisited.Add(city);
-                pathTable[city.hashCode] = new Table(start);
+                pathTable[city.hashCode] = new Table(city);
             }
         }
         
@@ -168,7 +90,7 @@ public class Djikstra
             if (city is null) break;
             int distance = pathTable[city.hashCode].minDistance;
             calculateDistanceFromStartVertex(city, pathTable, distance);
-            unvisited.Remove(city);
+            unvisited[city.hashCode] = null;
         }
         
         printResults(pathTable, start, destination);
@@ -190,11 +112,12 @@ public class Djikstra
         }
     }
 
-    private CityNode getClosestUnvisitedVertex(List<CityNode> unvisited, Table[] pathTable)
+    private CityNode getClosestUnvisitedVertex(CityNode[] unvisited, Table[] pathTable)
     {
         CityNode result = null;
         foreach (var city in unvisited)
         {
+            if (city is null) continue;
             if (city.visited) continue;
             if (result is null) result = city;
             if (pathTable[city.hashCode].minDistance < pathTable[result.hashCode].minDistance)
