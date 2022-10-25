@@ -71,7 +71,6 @@ public class Djikstra
         CityNode start = lookupCity(cityA);
         CityNode destination = lookupCity(cityB);
         
-        //List<CityNode> unvisited = new List<CityNode>();
         var unvisited = cities.ToArray();
         Table[] pathTable = new Table[ARRAYSIZE];
 
@@ -98,7 +97,6 @@ public class Djikstra
 
     private void calculateDistanceFromStartVertex(CityNode currentCity, Table[] pathTable, int distance)
     {
-        currentCity.visited = true;
         var neighbors = currentCity.getNeighbors();
         foreach (var neighbor in neighbors)
         {
@@ -118,7 +116,6 @@ public class Djikstra
         foreach (var city in unvisited)
         {
             if (city is null) continue;
-            if (city.visited) continue;
             if (result is null) result = city;
             if (pathTable[city.hashCode].minDistance < pathTable[result.hashCode].minDistance)
                 result = city;
