@@ -171,7 +171,6 @@ public class Djikstra
             unvisited.Remove(city);
         }
         
-        Console.WriteLine("Hey, maybe it works");
         printResults(pathTable, start, destination);
     }
 
@@ -208,6 +207,12 @@ public class Djikstra
     {
         int distance = pathTable[destination.hashCode].minDistance;
         Console.WriteLine($"Distance from {start} to {destination} is {distance}");
+        var next = destination;
+        while (next is not null)
+        {
+            Console.Write(next+", ");
+            next = pathTable[next.hashCode].prevVertex;
+        } Console.WriteLine();
     }
 
 }
