@@ -4,6 +4,8 @@ public class CityNode
 {
     public List<RailRoadConnection> adjacencyList;
     public readonly string city;
+    public readonly int hashCode;
+    public bool visited;
     protected bool Equals(CityNode other)
     {
         return city.Equals(other.city);
@@ -17,15 +19,11 @@ public class CityNode
         return Equals((CityNode)obj);
     }
 
-    public override int GetHashCode()
-    {
-        return city.GetHashCode();
-    }
-
-    public CityNode(string city)
+    public CityNode(string city, int index)
     {
         adjacencyList = new List<RailRoadConnection>();
         this.city = city;
+        this.hashCode = index;
     }
 
     public override string ToString()

@@ -1,7 +1,10 @@
-﻿namespace HP35.Current.Djikstra;
+﻿using HP35.Current.Graph;
+
+namespace HP35.Current.Djikstra;
 
 public class Djikstra
 {
+    private const int ARRAYSIZE = 541;
     public CityNode[] cities;
     private CityNode[] minPath;
     private int minimumTime;
@@ -11,7 +14,7 @@ public class Djikstra
     public Djikstra()
     {
         fileAddress = Path.GetFullPath("trains.csv");
-        cities = new CityNode[541];
+        cities = new CityNode[ARRAYSIZE];
         read();
     }
     private void read()
@@ -33,8 +36,8 @@ public class Djikstra
 
     private CityNode addOrGetCity(string name)
     {
-        CityNode result = new CityNode(name);
         int index = hash(name);
+        CityNode result = new CityNode(name, index);
         if (cities[index] is null)
         {
             cities[index] = result;
@@ -47,15 +50,6 @@ public class Djikstra
 
         return result;
     }
-    
-    public void print()
-    {
-        int i = 1;
-        foreach (var city in cities)
-        {
-            if(city is not null) Console.WriteLine(city+", "+(i++));
-        }
-    }
 
     private int hash(string name) {
         int hash = 7;
@@ -64,7 +58,7 @@ public class Djikstra
             hash +=  name[i]*power;
             power = (power*13)%cities.Length;
         }
-        return hash % cities.Length;
+        return hash % ARRAYSIZE; //ARRAYSIZE is 541
     }
 
     private CityNode lookup(string name)
@@ -145,6 +139,75 @@ public class Djikstra
             if (node.Equals(path[i])) return true;
         }
         return false;
+    }
+
+    public void searchMinPath(string cityA, string cityB)
+    {
+        CityNode start = lookup(cityA);
+        CityNode destination = lookup(cityB);
+        
+        List<CityNode> unvisited = new List<CityNode>();
+        Table[] pathTable = new Table[ARRAYSIZE];
+        
+        unvisited.Add(start);
+        int index = start.hashCode;
+        pathTable[index] = new Table(start, 0);
+        
+        foreach (var city in cities)
+        {
+            if (city is not null && !city.Equals(start))
+            {
+                unvisited.Add(city);
+                pathTable[city.hashCode] = new Table(start);
+            }
+        }
+        
+        while (true)
+        {
+            var city = getClosestUnvisitedVertex(unvisited, pathTable);
+            if (city is null) break;
+            int distance = pathTable[city.hashCode].minDistance;
+            calculateDistanceFromStartVertex(city, pathTable, distance);
+            unvisited.Remove(city);
+        }
+        
+        Console.WriteLine("Hey, maybe it works");
+        printResults(pathTable, start, destination);
+    }
+
+    private void calculateDistanceFromStartVertex(CityNode currentCity, Table[] pathTable, int distance)
+    {
+        currentCity.visited = true;
+        var neighbors = currentCity.getNeighbors();
+        foreach (var neighbor in neighbors)
+        {
+            int index = neighbor.hashCode;
+            int newDistance = currentCity.getDistanceToNode(neighbor) + distance;
+            if (newDistance < pathTable[index].minDistance)
+            {
+                pathTable[index].minDistance = newDistance;
+                pathTable[index].prevVertex = currentCity;
+            }
+        }
+    }
+
+    private CityNode getClosestUnvisitedVertex(List<CityNode> unvisited, Table[] pathTable)
+    {
+        CityNode result = null;
+        foreach (var city in unvisited)
+        {
+            if (city.visited) continue;
+            if (result is null) result = city;
+            if (pathTable[city.hashCode].minDistance < pathTable[result.hashCode].minDistance)
+                result = city;
+        }
+        return result;
+    }
+
+    private void printResults(Table[] pathTable, CityNode start, CityNode destination)
+    {
+        int distance = pathTable[destination.hashCode].minDistance;
+        Console.WriteLine($"Distance from {start} to {destination} is {distance}");
     }
 
 }

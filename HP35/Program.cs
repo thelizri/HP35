@@ -17,10 +17,10 @@ namespace HP35
         {
             var graph = new Djikstra();
             long t0 = Stopwatch.GetTimestamp();
-            graph.depthFirstSearch("Malmö","Kiruna",25);
+            graph.searchMinPath("Stockholm","Malmö");
             long t1 = Stopwatch.GetTimestamp();
             double time = (t1 - t0);
-            Console.WriteLine($"time taken: {(int)time/1000}");
+            Console.WriteLine($"time taken: {time}");
         }
     }
 }
