@@ -10,7 +10,7 @@ public class PriorityQueue
 
     public PriorityQueue(CityNode[] cities, CityNode start)
     {
-        unvisitedCities = cities.ToArray();
+        makeCopyOfCities(cities);
         
         pathTable = new Table[ARRAYSIZE];
 
@@ -24,6 +24,17 @@ public class PriorityQueue
         }
     }
 
+    private void makeCopyOfCities(CityNode[] cities)
+    {
+        unvisitedCities = new CityNode[52];
+        int i = 0;
+        foreach (var city in cities)
+        {
+            if (city is null) continue;
+            unvisitedCities[i++] = city;
+        }
+    }
+
     public Table[] getTable()
     {
         return pathTable;
@@ -32,14 +43,24 @@ public class PriorityQueue
     public CityNode next()
     {
         CityNode result = null;
+        int i = -1;
+        int index = 0;
         foreach (var city in unvisitedCities)
         {
+            i++;
             if (city is null) continue;
-            if (result is null) result = city;
-            if (pathTable[city.hashCode].minDistance < pathTable[result.hashCode].minDistance)
+            if (result is null)
+            {
                 result = city;
+                index = i;
+            }
+            if (pathTable[city.hashCode].minDistance < pathTable[result.hashCode].minDistance)
+            {
+                result = city;
+                index = i;
+            }
         }
-        if(result is not null) unvisitedCities[result.hashCode] = null;
+        if(result is not null) unvisitedCities[index] = null;
         return result;
     }
 }
