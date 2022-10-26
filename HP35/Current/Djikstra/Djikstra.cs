@@ -70,26 +70,16 @@ public class Djikstra
     {
         CityNode start = lookupCity(cityA);
         CityNode destination = lookupCity(cityB);
-        
-        var unvisited = cities.ToArray();
-        Table[] pathTable = new Table[ARRAYSIZE];
 
-        pathTable[start.hashCode] = new Table(start, 0);
-        foreach (var city in cities)
-        {
-            if (city is not null && !city.Equals(start))
-            {
-                pathTable[city.hashCode] = new Table(city);
-            }
-        }
-        
+        var queue = new PriorityQueue(cities, start);
+        var pathTable = queue.getTable();
+
         while (true)
         {
-            var city = getClosestUnvisitedVertex(unvisited, pathTable);
+            var city = queue.next();
             if (city is null) break;
             int distance = pathTable[city.hashCode].minDistance;
             calculateDistanceFromStartVertex(city, pathTable, distance);
-            unvisited[city.hashCode] = null;
         }
         
         printResults(pathTable, start, destination);
@@ -108,19 +98,6 @@ public class Djikstra
                 pathTable[index].prevVertex = currentCity;
             }
         }
-    }
-
-    private CityNode getClosestUnvisitedVertex(CityNode[] unvisited, Table[] pathTable)
-    {
-        CityNode result = null;
-        foreach (var city in unvisited)
-        {
-            if (city is null) continue;
-            if (result is null) result = city;
-            if (pathTable[city.hashCode].minDistance < pathTable[result.hashCode].minDistance)
-                result = city;
-        }
-        return result;
     }
 
     private void printResults(Table[] pathTable, CityNode start, CityNode destination)
