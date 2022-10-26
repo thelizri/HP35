@@ -76,18 +76,18 @@ public class Djikstra
         if (checkResults(start, destination)) return;
         
         var queue = new PriorityQueue(cities, start);
-        var pathTable = queue.getTable();
+        var table = queue.getTable();
 
         while (true)
         {
             var city = queue.next();
             if (city is null) break;
-            int distance = pathTable[city.hashCode].minDistance;
-            calculateDistanceFromStartVertex(city, pathTable, distance);
+            int distance = table.getDistance(city);
+            calculateDistanceFromStartVertex(city, table, distance);
         }
         
-        printResults(pathTable, start, destination);
-        ourResults.add(pathTable, start);
+        printResults(table, start, destination);
+        ourResults.add(table, start);
     }
 
     private bool checkResults(CityNode start, CityNode destination)
@@ -109,30 +109,29 @@ public class Djikstra
         return false;
     }
 
-    private void calculateDistanceFromStartVertex(CityNode currentCity, Table[] pathTable, int distance)
+    private void calculateDistanceFromStartVertex(CityNode currentCity, Table table, int distance)
     {
         var neighbors = currentCity.getNeighbors();
         foreach (var neighbor in neighbors)
         {
             int index = neighbor.hashCode;
             int newDistance = currentCity.getDistanceToNode(neighbor) + distance;
-            if (newDistance < pathTable[index].minDistance)
+            if (newDistance < table.getDistance(neighbor))
             {
-                pathTable[index].minDistance = newDistance;
-                pathTable[index].prevVertex = currentCity;
+                table.updateValues(neighbor, newDistance, currentCity);
             }
         }
     }
 
-    private void printResults(Table[] pathTable, CityNode start, CityNode destination)
+    private void printResults(Table table, CityNode start, CityNode destination)
     {
-        int distance = pathTable[destination.hashCode].minDistance;
+        int distance = table.getDistance(destination);
         Console.WriteLine($"Distance from {start} to {destination} is {distance}");
         var next = destination;
         while (next is not null)
         {
             Console.Write(next+", ");
-            next = pathTable[next.hashCode].prevVertex;
+            next = table.getPrevVertex(next);
         } Console.WriteLine();
     }
 

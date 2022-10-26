@@ -3,19 +3,19 @@
 public class Results
 {
     private const int ARRAYSIZE = 541;
-    private Table[][] results;
+    private Table[] results;
 
     public Results()
     {
-        results = new Table[ARRAYSIZE][];
+        results = new Table[ARRAYSIZE];
     }
 
-    public void add(Table[] result, CityNode start)
+    public void add(Table result, CityNode start)
     {
         results[start.hashCode] = result;
     }
 
-    public Table[] get(CityNode start)
+    public Table get(CityNode start)
     {
         return results[start.hashCode];
     }

@@ -20,13 +20,37 @@ namespace HP35
             graph.search("Malmö","Kiruna");
             long t1 = Stopwatch.GetTimestamp();
             double time = (t1 - t0);
-            Console.WriteLine($"\nExecution time: {time}");
+            Console.WriteLine($"\nExecution time: {time}\n");
             
             t0 = Stopwatch.GetTimestamp();
             graph.search("Malmö","Stockholm");
             t1 = Stopwatch.GetTimestamp();
             time = (t1 - t0);
-            Console.WriteLine($"\nExecution time: {time}");
+            Console.WriteLine($"\nExecution time: {time}\n");
+            
+            t0 = Stopwatch.GetTimestamp();
+            graph.search("Göteborg","Stockholm");
+            t1 = Stopwatch.GetTimestamp();
+            time = (t1 - t0);
+            Console.WriteLine($"\nExecution time: {time}\n");
+            
+            t0 = Stopwatch.GetTimestamp();
+            graph.search("Lund","Norrköping");
+            t1 = Stopwatch.GetTimestamp();
+            time = (t1 - t0);
+            Console.WriteLine($"\nExecution time: {time}\n");
+            
+            t0 = Stopwatch.GetTimestamp();
+            graph.search("Malmö","Stockholm");
+            t1 = Stopwatch.GetTimestamp();
+            time = (t1 - t0);
+            Console.WriteLine($"\nExecution time: {time}\n");
+            
+            t0 = Stopwatch.GetTimestamp();
+            graph.search("Malmö","Stockholm");
+            t1 = Stopwatch.GetTimestamp();
+            time = (t1 - t0);
+            Console.WriteLine($"\nExecution time: {time}\n");
         }
     }
 }

@@ -4,24 +4,13 @@ namespace HP35.Current.Djikstra;
 
 public class PriorityQueue
 {
-    private const int ARRAYSIZE = 541;
     private CityNode[] unvisitedCities;
-    private Table[] pathTable;
+    private Table table;
 
     public PriorityQueue(CityNode[] cities, CityNode start)
     {
         makeCopyOfCities(cities);
-        
-        pathTable = new Table[ARRAYSIZE];
-
-        pathTable[start.hashCode] = new Table(start, 0);
-        foreach (var city in cities)
-        {
-            if (city is not null && !city.Equals(start))
-            {
-                pathTable[city.hashCode] = new Table(city);
-            }
-        }
+        table = new Table(unvisitedCities, start);
     }
 
     private void makeCopyOfCities(CityNode[] cities)
@@ -35,9 +24,9 @@ public class PriorityQueue
         }
     }
 
-    public Table[] getTable()
+    public Table getTable()
     {
-        return pathTable;
+        return table;
     }
 
     public CityNode next()
@@ -54,7 +43,7 @@ public class PriorityQueue
                 result = city;
                 index = i;
             }
-            if (pathTable[city.hashCode].minDistance < pathTable[result.hashCode].minDistance)
+            if (table.getDistance(city) < table.getDistance(result))
             {
                 result = city;
                 index = i;

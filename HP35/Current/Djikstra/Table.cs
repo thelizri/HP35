@@ -1,24 +1,37 @@
-﻿using HP35.Current.Graph;
-
-namespace HP35.Current.Djikstra;
+﻿namespace HP35.Current.Djikstra;
 
 public class Table
 {
-    public readonly CityNode vertex;
-    public int minDistance;
-    public CityNode prevVertex;
+    private const int ARRAYSIZE = 541;
+    private CityNode[] cities;
+    private int[] distances;
+    private CityNode[] prevCities;
 
-    public Table(CityNode vertex)
+    public Table(CityNode[] cities, CityNode start)
     {
-        this.vertex = vertex;
-        minDistance = Int32.MaxValue;
-        prevVertex = null;
+        this.cities = cities;
+        distances = new int[ARRAYSIZE];
+        prevCities = new CityNode[ARRAYSIZE];
+        foreach (var city in this.cities)
+        {
+            distances[city.hashCode] = Int32.MaxValue;
+        }
+        distances[start.hashCode] = 0;
     }
-    
-    public Table(CityNode vertex, int distance)
+
+    public int getDistance(CityNode city)
     {
-        this.vertex = vertex;
-        minDistance = distance;
-        prevVertex = null;
+        return distances[city.hashCode];
+    }
+
+    public void updateValues(CityNode city, int dist, CityNode prev)
+    {
+        distances[city.hashCode] = dist;
+        prevCities[city.hashCode] = prev;
+    }
+
+    public CityNode getPrevVertex(CityNode city)
+    {
+        return prevCities[city.hashCode];
     }
 }
