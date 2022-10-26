@@ -7,11 +7,13 @@ public class Djikstra
     private const int ARRAYSIZE = 541;
     private CityNode[] cities;
     private readonly string fileAddress;
+    private Results ourResults;
 
     public Djikstra()
     {
         fileAddress = Path.GetFullPath("trains.csv");
         cities = new CityNode[ARRAYSIZE];
+        ourResults = new Results();
         read();
     }
     private void read()
@@ -71,6 +73,8 @@ public class Djikstra
         CityNode start = lookupCity(cityA);
         CityNode destination = lookupCity(cityB);
 
+        if (checkResults(start, destination)) return;
+        
         var queue = new PriorityQueue(cities, start);
         var pathTable = queue.getTable();
 
@@ -83,6 +87,26 @@ public class Djikstra
         }
         
         printResults(pathTable, start, destination);
+        ourResults.add(pathTable, start);
+    }
+
+    private bool checkResults(CityNode start, CityNode destination)
+    {
+        var table = ourResults.get(start);
+        if (table is not null)
+        {
+            printResults(table, start, destination);
+            return true;
+        }
+
+        table = ourResults.get(destination);
+        if (table is not null)
+        {
+            printResults(table, destination, start);
+            return true;
+        }
+        
+        return false;
     }
 
     private void calculateDistanceFromStartVertex(CityNode currentCity, Table[] pathTable, int distance)

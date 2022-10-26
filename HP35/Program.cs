@@ -21,6 +21,12 @@ namespace HP35
             long t1 = Stopwatch.GetTimestamp();
             double time = (t1 - t0);
             Console.WriteLine($"\nExecution time: {time}");
+            
+            t0 = Stopwatch.GetTimestamp();
+            graph.search("Malmö","Stockholm");
+            t1 = Stopwatch.GetTimestamp();
+            time = (t1 - t0);
+            Console.WriteLine($"\nExecution time: {time}");
         }
     }
 }
