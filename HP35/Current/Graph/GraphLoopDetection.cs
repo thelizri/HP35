@@ -1,92 +1,14 @@
 ﻿namespace HP35.Current.Graph;
 
-public class Graph2
+public class GraphLoopDetection
 {
     public CityNode[] cities;
     private readonly string fileAddress;
     private CityNode[] minPath;
     private int minimumTime;
     private int maxDepthSearch;
-    public class RailroadConnection
-    {
-        public CityNode a;
-        public CityNode b;
-        public int weight;
 
-        public RailroadConnection(CityNode a, CityNode b, int weight)
-        {
-            this.a = a;
-            this.b = b;
-            this.weight = weight;
-            a.adjacencyList.Add(this);
-            b.adjacencyList.Add(this);
-        }
-
-        public CityNode getDestination(CityNode start)
-        {
-            if (start.Equals(a)) return b;
-            if (start.Equals(b)) return a;
-            throw new Exception("Something is wrong");
-        }
-    }
-
-    public class CityNode
-    {
-        public List<RailroadConnection> adjacencyList;
-        public readonly string city;
-
-        protected bool Equals(CityNode other)
-        {
-            return city.Equals(other.city);
-        }
-
-        public override bool Equals(object? obj)
-        {
-            if (ReferenceEquals(null, obj)) return false;
-            if (ReferenceEquals(this, obj)) return true;
-            if (obj.GetType() != this.GetType()) return false;
-            return Equals((CityNode)obj);
-        }
-
-        public override int GetHashCode()
-        {
-            return city.GetHashCode();
-        }
-
-        public CityNode(string city)
-        {
-            adjacencyList = new List<RailroadConnection>();
-            this.city = city;
-        }
-
-        public override string ToString()
-        {
-            return city;
-        }
-
-        public CityNode[] getNeighbors()
-        {
-            CityNode[] array = new CityNode[adjacencyList.Count];
-            int i = 0;
-            foreach (var edge in adjacencyList)
-            {
-                array[i++] = edge.getDestination(this);
-            }
-            return array;
-        }
-
-        public int getDistanceToNode(CityNode neighbor)
-        {
-            foreach (var edge in adjacencyList)
-            {
-                if (neighbor.Equals(edge.getDestination(this)))
-                    return edge.weight;
-            }
-            throw new Exception("Fuck myself in the ass");
-        }
-    }
-    
-    public Graph2()
+    public GraphLoopDetection()
     {
         fileAddress = Path.GetFullPath("trains.csv");
         cities = new CityNode[541];
@@ -105,7 +27,7 @@ public class Graph2
             var rows = line.Split(',');
             CityNode a = addOrGetCity(rows[0]);
             CityNode b = addOrGetCity(rows[1]);
-            RailroadConnection railroadConnection = new RailroadConnection(a, b, Int32.Parse(rows[2]));
+            RailRoadConnection railRoadConnection = new RailRoadConnection(a, b, Int32.Parse(rows[2]));
         }
     }
 
@@ -153,7 +75,6 @@ public class Graph2
         return result;
     }
     
-    
     public void depthFirstSearch(string cityStart, string cityDestination, int max)
     {
         var start = lookup(cityStart);
@@ -193,10 +114,12 @@ public class Graph2
             return;
         }
         if (depth > maxDepthSearch) return;
+        if (amIWalkingInCircles(path, current)) return;
         var neighbors = current.getNeighbors();
         foreach (var city in neighbors)
         {
             if (city.Equals(previous)) continue;
+            //Clone path then add node to path
             var clone = path.ToList();
             clone.Add(city);
             findDestination(current, city, destination,
@@ -213,6 +136,15 @@ public class Graph2
             distance += city.getDistanceToNode(path[i+1]);
         }
         return distance;
+    }
+
+    private bool amIWalkingInCircles(List<CityNode> path, CityNode node)
+    {
+        for (int i = 0; i < path.Count - 1; i++)
+        {
+            if (node.Equals(path[i])) return true;
+        }
+        return false;
     }
 
 }

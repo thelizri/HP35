@@ -6,11 +6,13 @@ public class PriorityQueue
 {
     private CityNode[] unvisitedCities;
     private Table table;
+    private int minIndex;
 
     public PriorityQueue(CityNode[] cities, CityNode start)
     {
         makeCopyOfCities(cities);
         table = new Table(unvisitedCities, start);
+        minIndex = 0;
     }
 
     private void makeCopyOfCities(CityNode[] cities)
@@ -52,4 +54,5 @@ public class PriorityQueue
         if(result is not null) unvisitedCities[index] = null;
         return result;
     }
+    
 }

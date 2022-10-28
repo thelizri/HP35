@@ -55,7 +55,7 @@ public class Djikstra
         int power = 1;
         for (int i = 0; i < name.Length; i++) {
             hash +=  name[i]*power;
-            power = (power*13)%cities.Length;
+            power = (power*13)%ARRAYSIZE;
         }
         return hash % ARRAYSIZE; //ARRAYSIZE is 541
     }
@@ -73,7 +73,7 @@ public class Djikstra
         CityNode start = lookupCity(cityA);
         CityNode destination = lookupCity(cityB);
 
-        if (checkResults(start, destination)) return;
+        //if (checkResults(start, destination)) return;
         
         var queue = new PriorityQueue(cities, start);
         var table = queue.getTable();
@@ -87,7 +87,7 @@ public class Djikstra
         }
         
         printResults(table, start, destination);
-        ourResults.add(table, start);
+        //ourResults.add(table, start);
     }
 
     private bool checkResults(CityNode start, CityNode destination)
@@ -114,7 +114,6 @@ public class Djikstra
         var neighbors = currentCity.getNeighbors();
         foreach (var neighbor in neighbors)
         {
-            int index = neighbor.hashCode;
             int newDistance = currentCity.getDistanceToNode(neighbor) + distance;
             if (newDistance < table.getDistance(neighbor))
             {
